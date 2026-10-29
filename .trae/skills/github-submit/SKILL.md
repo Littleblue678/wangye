@@ -83,6 +83,15 @@ git ls-remote origin refs/heads/<branch>
 
 The local `HEAD` SHA must equal the SHA returned by `ls-remote` for the pushed branch.
 
+If the SSH transport keeps resetting the connection on repeated reads, verify over HTTPS instead — the repository may still be reachable anonymously:
+
+```powershell
+$remote = (git ls-remote https://github.com/<owner>/<repo>.git refs/heads/<branch>).Split("`t")[0]
+$local  = (git rev-parse HEAD).Trim()
+```
+
+Equal SHAs mean the push landed even when git reported a transport error.
+
 ## Failure handling
 
 | Symptom | Action |
@@ -91,6 +100,7 @@ The local `HEAD` SHA must equal the SHA returned by `ls-remote` for the pushed b
 | `Permission denied (publickey)` | Report that the configured key is not registered on GitHub; do not generate or upload keys yourself |
 | `Repository not found` | Confirm the repo exists, the owner name is correct, and the key belongs to an account with write access |
 | `non-fast-forward` | `git pull --rebase` only after the user agrees; never force push |
+| `Connection reset` during push or `ls-remote` | Verify the remote SHA over HTTPS before retrying; the push often already landed |
 | Push succeeds but `ls-remote` SHA differs | Re-check the branch name; do not claim success |
 
 ## Report
