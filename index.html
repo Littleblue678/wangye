@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <title>抓小球</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- 顶部信息栏：实时分数 + 倒计时 -->
+    <header id="hud">
+      <div class="hud-item">分数：<span id="score">0</span></div>
+      <div class="hud-item">时间：<span id="timer">02:00</span></div>
+    </header>
+
+    <!-- 游戏舞台：小球与特效层 -->
+    <main id="stage">
+      <div id="ball" hidden></div>
+      <div id="fx-layer" aria-hidden="true"></div>
+    </main>
+
+    <!-- 开始遮罩 -->
+    <div id="start-overlay" class="overlay">
+      <div class="panel">
+        <h1>抓小球</h1>
+        <p class="hint">2 分钟内点击蓝色小球得 2 分，点空白扣 1 分</p>
+        <button id="start-btn" type="button">开始游戏</button>
+      </div>
+    </div>
+
+    <!-- 结算弹窗 -->
+    <div id="end-overlay" class="overlay" hidden>
+      <div class="panel">
+        <h2>游戏结束</h2>
+        <p>最终得分：<strong id="final-score">0</strong></p>
+        <p>历史最高分：<strong id="high-score">0</strong></p>
+        <p id="new-record" class="new-record" hidden>新纪录！</p>
+        <button id="restart-btn" type="button">重新开始</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 经典脚本（非 ES module），保证 file:// 双击即可运行 -->
+  <script src="game-core.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
