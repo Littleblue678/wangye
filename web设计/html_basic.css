@@ -1,0 +1,53 @@
+  /* 全局css 通配符选择器 */
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        ul{
+            list-style: none;
+        }
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        img{
+            border: none;
+            display: block;
+        }
+
+        /* 类选择器 */
+        .title-demo{
+            color: red;
+            background: yellow;
+            padding: 10px 20px ;
+            border: 1px solid black;
+            margin:20px 0;
+        }
+        .text-cont{
+            line-height: 1.8;
+            font-size:16px;
+        }
+
+        /* id选择器 */
+        #intro-box{
+            width: 600px;
+            border: 1px solid blue;
+            margin: 30px auto;
+            padding:20px;
+        }
+
+        /* 后代选择器 */
+        #intro-box h3{
+            color:#222;
+            margin-bottom:12px;
+        }
+        #intro-box ul li{
+            padding:6px 0;
+        }
+
+        /* 群组选择器 */
+        ol,ul,.text-cont{
+            margin: 10px 0;
+            padding: 10px;
+            color: purple;
+        }

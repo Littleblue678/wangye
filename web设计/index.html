@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="王烨的高级网页设计课堂实践目录">
+	<title>高级网页设计 | 王烨的课堂实践</title>
+	<style>
+		:root {
+			--ink: #17202a;
+			--muted: #667085;
+			--paper: #f8f5ef;
+			--panel: #fffdf9;
+			--line: #e6dfd3;
+			--accent: #dc5a3d;
+			--accent-dark: #a63b27;
+			--mint: #bfd9ce;
+			--shadow: 0 22px 55px rgba(72, 52, 35, 0.11);
+		}
+
+		* {
+			box-sizing: border-box;
+		}
+
+		html {
+			scroll-behavior: smooth;
+		}
+
+		body {
+			margin: 0;
+			color: var(--ink);
+			background:
+				linear-gradient(135deg, rgba(191, 217, 206, 0.28), transparent 34%),
+				linear-gradient(315deg, rgba(220, 90, 61, 0.08), transparent 38%),
+				var(--paper);
+			font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+			line-height: 1.7;
+		}
+
+		a {
+			color: inherit;
+		}
+
+		.page-shell {
+			width: min(1160px, calc(100% - 40px));
+			margin: 0 auto;
+		}
+
+		header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 24px;
+			padding: 28px 0;
+		}
+
+		.brand {
+			display: inline-flex;
+			align-items: center;
+			gap: 12px;
+			color: var(--ink);
+			font-weight: 800;
+			text-decoration: none;
+			letter-spacing: 0.04em;
+		}
+
+		.brand-mark {
+			display: grid;
+			width: 40px;
+			height: 40px;
+			place-items: center;
+			border-radius: 12px 12px 12px 3px;
+			color: #fff;
+			background: var(--accent);
+			box-shadow: 5px 5px 0 var(--mint);
+		}
+
+		nav {
+			display: flex;
+			gap: 24px;
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		nav a {
+			text-decoration: none;
+		}
+
+		nav a:hover,
+		nav a:focus-visible {
+			color: var(--accent-dark);
+		}
+
+		.hero {
+			position: relative;
+			overflow: hidden;
+			display: grid;
+			grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+			gap: 48px;
+			align-items: center;
+			min-height: 465px;
+			padding: clamp(36px, 7vw, 82px);
+			border: 1px solid rgba(255, 255, 255, 0.7);
+			border-radius: 4px;
+			background: var(--panel);
+			box-shadow: var(--shadow);
+		}
+
+		.hero::after {
+			position: absolute;
+			right: -90px;
+			bottom: -120px;
+			width: 310px;
+			height: 310px;
+			border: 1px solid rgba(220, 90, 61, 0.25);
+			border-radius: 50%;
+			content: "";
+		}
+
+		.eyebrow {
+			margin: 0 0 20px;
+			color: var(--accent-dark);
+			font-size: 13px;
+			font-weight: 800;
+			letter-spacing: 0.2em;
+		}
+
+		h1,
+		h2,
+		p {
+			margin-top: 0;
+		}
+
+		h1 {
+			max-width: 620px;
+			margin-bottom: 22px;
+			font-family: Georgia, "Times New Roman", serif;
+			font-size: clamp(42px, 6vw, 76px);
+			line-height: 1.08;
+			letter-spacing: 0.01em;
+		}
+
+		.hero-copy {
+			max-width: 540px;
+			margin-bottom: 30px;
+			color: var(--muted);
+			font-size: 17px;
+		}
+
+		.hero-actions {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 12px;
+		}
+
+		.button {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 46px;
+			padding: 0 19px;
+			border: 1px solid var(--ink);
+			border-radius: 2px;
+			font-size: 14px;
+			font-weight: 700;
+			text-decoration: none;
+			transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+		}
+
+		.button:hover,
+		.button:focus-visible {
+			transform: translate(-2px, -2px);
+			box-shadow: 4px 4px 0 var(--mint);
+		}
+
+		.button-primary {
+			border-color: var(--accent);
+			color: #fff;
+			background: var(--accent);
+		}
+
+		.button-secondary {
+			background: transparent;
+		}
+
+		.hero-note {
+			position: relative;
+			z-index: 1;
+			justify-self: end;
+			width: min(100%, 300px);
+			padding: 26px;
+			border-left: 4px solid var(--accent);
+			background: #f2eee5;
+		}
+
+		.hero-note strong {
+			display: block;
+			margin-bottom: 8px;
+			font-family: Georgia, "Times New Roman", serif;
+			font-size: 31px;
+			line-height: 1.2;
+		}
+
+		.hero-note span {
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		.section {
+			padding: 92px 0 0;
+		}
+
+		.section-heading {
+			display: flex;
+			align-items: end;
+			justify-content: space-between;
+			gap: 24px;
+			margin-bottom: 26px;
+		}
+
+		.section-heading h2 {
+			margin-bottom: 0;
+			font-family: Georgia, "Times New Roman", serif;
+			font-size: 38px;
+			line-height: 1.2;
+		}
+
+		.section-heading p {
+			max-width: 420px;
+			margin-bottom: 0;
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		.course-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr);
+			gap: 16px;
+		}
+
+		.course-card {
+			display: flex;
+			min-height: 245px;
+			flex-direction: column;
+			padding: 24px;
+			border: 1px solid var(--line);
+			background: rgba(255, 253, 249, 0.76);
+			text-decoration: none;
+			transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+		}
+
+		.course-card:hover,
+		.course-card:focus-visible {
+			transform: translateY(-5px);
+			border-color: var(--accent);
+			box-shadow: 0 12px 24px rgba(72, 52, 35, 0.1);
+		}
+
+		.course-number {
+			color: var(--accent);
+			font-family: Georgia, "Times New Roman", serif;
+			font-size: 24px;
+		}
+
+		.course-card h3 {
+			margin: 28px 0 8px;
+			font-size: 21px;
+		}
+
+		.course-card p {
+			margin-bottom: 18px;
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		.course-link {
+			margin-top: auto;
+			color: var(--accent-dark);
+			font-size: 13px;
+			font-weight: 800;
+		}
+
+		.prompt-box {
+			margin: 92px 0 42px;
+			padding: 30px;
+			border-top: 1px solid var(--ink);
+			border-bottom: 1px solid var(--ink);
+		}
+
+		.prompt-box h2 {
+			margin-bottom: 12px;
+			font-size: 18px;
+		}
+
+		.prompt-box p {
+			margin-bottom: 0;
+			color: var(--muted);
+			font-size: 14px;
+		}
+
+		footer {
+			display: flex;
+			justify-content: space-between;
+			gap: 20px;
+			padding: 24px 0 34px;
+			color: var(--muted);
+			font-size: 13px;
+		}
+
+		@media (max-width: 760px) {
+			.page-shell {
+				width: min(100% - 28px, 600px);
+			}
+
+			header {
+				align-items: flex-start;
+				flex-direction: column;
+				gap: 16px;
+			}
+
+			nav {
+				gap: 16px;
+			}
+
+			.hero {
+				grid-template-columns: 1fr;
+				gap: 30px;
+				min-height: auto;
+				padding: 38px 26px;
+			}
+
+			.hero-note {
+				justify-self: start;
+			}
+
+			.section {
+				padding-top: 60px;
+			}
+
+			.section-heading {
+				align-items: flex-start;
+				flex-direction: column;
+				gap: 10px;
+			}
+
+			.course-grid {
+				grid-template-columns: 1fr;
+			}
+
+			.prompt-box {
+				margin-top: 60px;
+				padding: 24px 0;
+			}
+
+			footer {
+				align-items: flex-start;
+				flex-direction: column;
+				gap: 6px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="page-shell">
+		<header>
+			<a class="brand" href="index.html" aria-label="返回课程首页">
+				<span class="brand-mark">W</span>
+				<span>王烨 / WEB PRACTICE</span>
+			</a>
+			<nav aria-label="页面导航">
+				<a href="#catalog">课堂目录</a>
+				<a href="#prompt">本次任务</a>
+			</nav>
+		</header>
+
+		<main>
+			<section class="hero" aria-labelledby="page-title">
+				<div>
+					<p class="eyebrow">ADVANCED WEB DESIGN · CLASSROOM PRACTICE</p>
+					<h1 id="page-title">高级网页设计<br>课堂实践</h1>
+					<p class="hero-copy">这里记录王烨在网页设计课堂中的练习，从 HTML 基础开始，逐步搭建属于自己的网页作品集。</p>
+					<div class="hero-actions">
+						<a class="button button-primary" href="#catalog">查看课堂目录</a>
+						<a class="button button-secondary" href="html_basic001.html">进入最新练习</a>
+					</div>
+				</div>
+				<aside class="hero-note" aria-label="课程信息">
+					<strong>01<br>从结构开始</strong>
+					<span>HTML、CSS 与持续迭代中的网页作品</span>
+				</aside>
+			</section>
+
+			<section class="section" id="catalog" aria-labelledby="catalog-title">
+				<div class="section-heading">
+					<h2 id="catalog-title">课堂目录</h2>
+					<p>每一个练习都是一次小型实验。已完成的页面可以直接打开，新的模块将在课堂实践中持续加入。</p>
+				</div>
+				<div class="course-grid">
+					<a class="course-card" href="html_basic001.html">
+						<span class="course-number">01</span>
+						<h3>HTML 基础</h3>
+						<p>认识标题、段落、列表、表格、图片与超链接等 HTML 常用元素。</p>
+						<span class="course-link">打开网页练习 →</span>
+					</a>
+					<a class="course-card" href="html_basic001.html">
+						<span class="course-number">02</span>
+						<h3>自我介绍网页</h3>
+						<p>用一个完整的自我介绍页面，把基础标签组合成可阅读的网页内容。</p>
+						<span class="course-link">查看自我介绍 →</span>
+					</a>
+					<div class="course-card" aria-label="待添加的课堂模块">
+						<span class="course-number">03</span>
+						<h3>其余模块</h3>
+						<p>后续课程实践将在这里继续增加，记录从基础到完整作品的学习过程。</p>
+						<span class="course-link">后续增加 · 敬请期待</span>
+					</div>
+				</div>
+			</section>
+
+			<section class="prompt-box" id="prompt" aria-labelledby="prompt-title">
+				<h2 id="prompt-title">本次页面提示词</h2>
+				<p>创建一个新页面，包括本目录下的所有网页的超链接，使用原生代码，不使用cdn，新页面名称为index.html，主题为王烨的《高级网页设计》课堂实践，美化页面，课堂目录中包含HTML基础、自我介绍网页、其余模块后续在增加。页面中包括本提示词。</p>
+			</section>
+		</main>
+
+		<footer>
+			<span>王烨的《高级网页设计》课堂实践</span>
+			<span>HTML / CSS · 持续更新中</span>
+		</footer>
+	</div>
+</body>
+</html>

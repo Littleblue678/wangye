@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的第二个网页</title>
+</head>
+<body>
+    <h1 class="title-demo">信息收集表单</h1>
+
+    <h2 class="title-demo"  >个人基础表单</h2>
+
+    <form action="http://baidu.com" name="fm" method="post">
+        <p>用户名：
+            <input type="text" placeholder="请输入用户名" required>
+        </p>
+        <p>
+            <label for="pwd">密码：</label>
+            <!-- label的for属性对应input的id属性，
+             点击label标签，会自动聚焦到input输入框 -->
+            <input type="password" name="pwd" id="pwd">
+        </p>
+        <!-- h5出现的内容 -->
+        <p>邮箱：
+            <input type="email" name="email" id="email">
+        </p>
+        <p>
+            请上传文件：
+            <input type="file" name="file" id="file" multiple>
+            </input>
+        </p>
+        <p>
+            性别：
+            <input type="radio" name="gender" value="f">女
+            <input type="radio" name="gender" value="m">男
+        </p>
+        <p>
+            爱好：
+            <input type="checkbox" name="hobby" value="c"> listening</input>
+            <input type="checkbox" name="hobby" value="s"> playing</input>
+             <input type="checkbox" name="hobby" value="r"> sleeping</input>
+           
+        </p>
+        <p>
+            自我介绍：
+            <textarea name="intro" id="intro" cols="30" rows="10"></textarea>
+        </p>
+        <p>
+            籍贯：
+            <select name="city" id="city">
+                <option value="beijing">北京</option>
+                <option value="shanghai">上海</option>
+                <option value="guangzhou">广州</option>
+                <option value="liaoning">辽宁</option>
+            </select>
+
+        </p>
+        <p>
+            <input type="submit" value="提交">
+            <input type="reset" value="重置">
+            <input type="button" value="取消"></input>
+        </p>
+            </input>
+        </p>
+
+    </form>
+
+    <a href="./html_basic004.html">← 返回自我介绍主页</a>
+</body>
+</html>

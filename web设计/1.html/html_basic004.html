@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--英文叹号回车  -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的第一个网页</title>
+<link rel="stylesheet" href="./html_basic.css">
+     
+</head>
+
+<body>
+    <h2 class="title-demo">1.个人基本信息</h2>
+    <!-- 一共8级标题h1‑h8 -->
+    <h1>孙立豪</h1>
+    <h2>计算机专业学生</h2>
+    <h3>研究方向:嵌入式开发、Web前端</h3>
+    <h3>喜欢动手写代码做项目</h3>
+    <h3>持续学习，不断积累经验</h3>
+    <h3>脚踏实地，稳步提升</h3>
+    <h2 class="title-demo">2.自我描述</h2>
+    <p class="text-cont">我是一名计算机专业学生，热爱编程，喜欢软硬件结合的项目开发。</p>
+        <!-- 常用的强调的两种方式：斜体em和加粗strong,下划线u,删除线s -->
+        我的<em>个人特点</em>:遇到bug愿意<strong>耐心调试排查</strong>,<br>
+        有<u>较强动手实践</u>能力。<s>消极摆烂</s>
+    </p>
+    <hr>
+    <h2 class="title-demo">3.超链接和图片</h2>
+    <a href="http://baidu.com" target="_blank">百度</a>
+    <img src="./img/1.jpg" alt="百度logo">
+    <h2 class="title-demo">4.我的列表信息</h2>
+    <h2>我喜欢做的事情</h2>
+    <ul class="list-demo" >
+        <li>嵌入式开发</li>
+        <li>网页前端学习</li>
+        <li>打游戏放松</li>
+        <li>阅读技术文档</li>
+    </ul>
+    <h2>我擅长的课程</h2>
+    <ol type="A">
+        <li>HTML/CSS前端</li>
+        <li>C语言嵌入式</li>
+        <li>计算机基础</li>
+    </ol>
+    <h2 class="title-demo">5.表格</h2>
+    <!-- cellspacing是单元格之间的距离，
+     cellpadding="3"是单元格内容与边框之间的距离 -->
+    <table id="user-table" border="2" cellspacing="0" cellpadding="3">
+        <caption>用户信息表</caption>
+        <!-- （tr>td*3）*4回车 实现的是三行四列的表格 -->
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>专业</th>
+            <th>城市</th>
+        </tr>
+        <tr>
+            <td>孙立豪</td>
+            <td>18</td>
+            <td>男</td>
+            <td>计算机科学与技术</td>
+            <td>新疆</td>
+        </tr>
+    </table>
+<h2 class="title-demo">6.div块级元素</h2>
+    <div>
+        <p>div特点:独占一行、块级元素、可以嵌套任意标签。</p>
+        <p>学习心得:div是网页布局最常用的标签,可用于划分页面模块。</p>
+    </div>
+    <div>
+        <p>日常学习中,使用div结构整理网页内容,让页面结构更清晰。</p>
+        <p>后续会继续学习div+css布局,制作完整网页项目。</p>
+    </div>
+
+   <h2 class="title-demo">7.H5语义化标签练习</h2>
+    <header>网页头部：个人自我介绍网站</header>
+    <nav>导航区域｜个人简介｜兴趣爱好｜<a href="form.html">留言表单页面</a></nav>
+    <section>主体内容区域：存放个人全部介绍内容</section>
+    <article>文章区域：记录个人学习成长感悟</article>
+    <aside>侧边栏：友情链接与拓展资源</aside>
+    <footer>页脚区域|2026 孙立豪 网页作业版权所有</footer>
+
+    <h2 class="title-demo">8.留言表单入口</h2>
+    <p>点击下方链接跳转留言表单页面：</p>
+    <p><a href="form.html"> →进入留言表页面</a></p>
+
+    <button class="btn">页面按钮（鼠标悬浮变红）</button>
+ <h2 class="title-demo">基础表单+H5表单</h2>
+    <form action="http://baidu.com" name="fm" method="post">
+        <p>用户名：
+            <input type="text" placeholder="请输入用户名" required>
+        </p>
+        <p>
+            <label for="pwd">密码：</label>
+            <!-- label的for属性对应input的id属性，
+             点击label标签，会自动聚焦到input输入框 -->
+            <input type="password" name="pwd" id="pwd">
+        </p>
+        <!-- h5出现的内容 -->
+        <p>邮箱：
+            <input type="email" name="email" id="email">
+        </p>
+        <p>
+            请上传文件：
+            <input type="file" name="file" id="file" multiple>
+            </input>
+        </p>
+        <p>
+            性别：
+            <input type="radio" name="gender" value="f">女
+            <input type="radio" name="gender" value="m">男
+        </p>
+        <p>
+            爱好：
+            <input type="checkbox" name="hobby" value="c"> croding </input>
+            <input type="checkbox" name="hobby" value="s"> playing</input>
+             <input type="checkbox" name="hobby" value="r"> reading</input>
+           
+        </p>
+        <p>
+            自我介绍：
+            <textarea name="intro" id="intro" cols="30" rows="10"></textarea>
+        </p>
+        <p>
+            籍贯：
+            <select name="city" id="city">
+                <option value="beijing">北京</option>
+                <option value="shanghai">上海</option>
+                <option value="xinjiang">新疆</option>
+            </select>
+
+        </p>
+        <p>
+            <input type="submit" value="提交">
+            <input type="reset" value="重置">
+            <input type="button" value="取消"></input>
+        </p>
+            </input>
+        </p>
+
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+</html>
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言板 - 周丽的自我介绍</title>
+    <link rel="stylesheet" href="./html_basic.css">
+</head>
+
+<body>
+    <header>
+        <h1>留言板</h1>
+        <p>留下你的信息，我会尽快回复你~</p>
+    </header>
+
+    <p><a href="./hmtl_basic.html">← 返回主页面</a></p>
+
+    <!-- 基础表单 + H5 表单，action 指向百度作为演示 -->
+    <form action="http://baidu.com" name="fm" method="post">
+        <p>用户名：
+            <input type="text" placeholder="请输入用户名" required>
+        </p>
+        <p>
+            <label for="pwd">密码：</label>
+            <!-- label 的 for 属性对应 input 的 id 属性，
+             点击 label 标签，会自动聚焦到 input 输入框 -->
+            <input type="password" name="pwd" id="pwd">
+        </p>
+        <!-- h5 出现的内容 -->
+        <p>邮箱：
+            <input type="email" name="email" id="email" placeholder="your@email.com">
+        </p>
+        <p>手机号：
+            <input type="tel" name="phone" id="phone" placeholder="请输入手机号">
+        </p>
+        <p>生日：
+            <input type="date" name="birthday" id="birthday">
+        </p>
+        <p>数量：
+            <input type="number" name="num" id="num" min="1" max="10" value="1">
+        </p>
+        <p>
+            请上传文件：
+            <input type="file" name="file" id="file" multiple>
+        </p>
+        <p>
+            性别：
+            <input type="radio" name="gender" value="f">女
+            <input type="radio" name="gender" value="m">男
+        </p>
+        <p>
+            爱好：
+            <input type="checkbox" name="hobby" value="c"> cooking
+            <input type="checkbox" name="hobby" value="s"> singing
+            <input type="checkbox" name="hobby" value="r"> reading
+        </p>
+        <p>
+            自我介绍：
+            <textarea name="intro" id="intro" cols="30" rows="10" placeholder="介绍一下你自己吧~"></textarea>
+        </p>
+        <p>
+            籍贯：
+            <select name="city" id="city">
+                <option value="beijing">北京</option>
+                <option value="shanghai">上海</option>
+                <option value="guangzhou">广州</option>
+                <option value="dalian">辽宁</option>
+            </select>
+        </p>
+        <p>
+            <input type="submit" value="提交">
+            <input type="reset" value="重置">
+            <input type="button" value="取消">
+        </p>
+    </form>
+
+    <button type="button">表单内的按钮</button>
+
+    <footer>
+        <p><a href="./hmtl_basic.html">返回主页面</a></p>
+    </footer>
+</body>
+
+</html>

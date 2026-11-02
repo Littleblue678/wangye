@@ -1,0 +1,54 @@
+/* CSS选择器：
+           （1）标签选择器（一般全局CSS用）
+           （2）类选择器
+           （3）id选择器
+           （4）后代选择器
+           （5）群组选择器  */
+   /* 全局css*/
+   *{
+       margin: 0;
+       padding: 0;
+   }
+   ul{
+       list-style: none;
+   }
+   a{
+       text-decoration: none;
+       color: black;
+   }
+   /* img比较特殊是行内块元素，可以设置宽高，边框等属性 */
+   img{
+       border: none;
+       display: block;
+   }
+   /* 类选择器 */
+   .title-demo{
+       color: red;
+       background: yellow;
+       padding: 10px 20px ;
+       border: 1px solid black;
+   }
+   /* id选择器 */
+   #user-table{
+       width: 500px;
+       border: 1px solid blue;
+       /* margin和padding两个值分别是上下和左右 */
+       margin: 0 auto;
+   }
+   /* 后代选择器 */
+   #user-table caption{
+       color: yellow;
+       font-size: 50px;
+       font-weight: bold;
+   }
+   /* 群组选择器 */
+   ol,ul,.text-cont{
+       margin: 10px 0;
+    padding: 10px;
+    color: purple;
+   }
+
+   .btn:hover{
+       background: red;
+
+   }

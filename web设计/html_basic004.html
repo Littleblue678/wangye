@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<!--英文叹号回车  -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的第一个网页</title>
+    <link rel="stylesheet" href="./html_basic.css">
+ 
+     
+</head>
+
+<body>
+        <!-- H5语义标签 header 头部 -->
+    <header>
+        <h1 class="title-demo">我的个人自我介绍</h1>
+    </header>
+
+    <h2 class="title-demo">1.关于我</h2>
+    <!-- 一共6级标题h1-h6 -->
+    <h1>个人简介</h1>
+    <h2>自我介绍</h2>
+    <h3>课表展示</h3>
+    <h4>兴趣爱好</h4>
+    <h5>个人信息</h5>
+    <h6>其他信息</h6>
+    <h2 class="title-demo">2.自我介绍</h2>
+    <p class="text-cont">大家好！我是一名计算机专业的学生，<em>性格开朗</em>，喜欢学习新技术，我对<strong>前端开发</strong>特别感兴趣。</p>
+        <!-- 常用的强调的两种方式：斜体em和加粗strong,下划线u,删除线s -->
+    <p>
+        我平时喜欢<u>打游戏</u>、听音乐，也喜欢睡觉。<br>
+        我的学号是：<s>123</s> 24001010531
+    </p>
+    <hr>
+    <h2 class="title-demo">3.超链接和课表图片</h2>
+    <a href="http://baidu.com" target="_blank">百度</a>
+    <img src="./img/111.png" alt="百度logo">
+    <h2 class="title-demo">4.我的兴趣爱好</h2>
+    <h3>我喜欢做的事情</h3>
+    <ul class="list-demo" >
+        <li>打游戏</li>
+        <li>听音乐</li>
+        <li>睡觉</li>
+    </ul>
+    <h3>我喜欢的课程</h3>
+    <ol type="A">
+        <li>数学</li>
+        <li>英语</li>
+        <li>语文</li>
+    </ol>
+    <h2 class="title-demo">5.个人信息表</h2>
+    <!-- cellspacing是单元格之间的距离，
+     cellpadding="3"是单元格内容与边框之间的距离 -->
+    <table id="user-table" border="2" cellspacing="0" cellpadding="3">
+        <caption>我的基本信息</caption>
+        <!-- （tr>td*3）*4回车 实现的是三行四列的表格 -->
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>城市</th>
+        </tr>
+        <tr>
+            <td>杨楠</td>
+            <td>20</td>
+            <td>女</td>
+            <td>大连</td>
+        </tr>
+    </table>
+    <h2 class="title-demo">6.其他信息</h2>
+    <div>
+        <p>星座：双鱼座</p>
+        <p>联系方式：13050455845</p>
+    </div>
+    <!-- header、nav、section、article、footer、aside本质上都是div -->
+    
+     <!-- H5语义标签 nav 导航，跳转到表单子页面 -->
+    <nav>
+        <a href="./html_basic003.html">👉 点击跳转到【信息填写表单页面】</a>
+    </nav>
+    
+
+
+</body>
+
+</html>

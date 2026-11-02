@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<!--
+  作者：王烨
+  建立时间：2026-11-02
+  使用模型：DeepSeek-V4.1-Flash
+  功能名称：新闻选项卡页面
+  功能简介：以选项卡形式展示国内、省内、国际、最热新闻，国内新闻为默认选项。
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>新闻中心 - 选项卡</title>
+  <style>
+    :root {
+      --accent: #1a73e8;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --bg: #f4f6fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px 16px;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 920px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      margin: 0 0 20px;
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .tabs {
+      overflow: hidden;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .tab-nav {
+      display: flex;
+      gap: 6px;
+      padding: 0 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .tab {
+      position: relative;
+      padding: 14px 18px;
+      border: none;
+      background: none;
+      color: var(--muted);
+      font: inherit;
+      font-size: 15px;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .tab:hover {
+      color: var(--text);
+    }
+
+    .tab::after {
+      content: "";
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 0;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+      transform: scaleX(0);
+      transform-origin: center;
+      transition: transform 0.2s ease;
+    }
+
+    .tab.is-active {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .tab.is-active::after {
+      transform: scaleX(1);
+    }
+
+    .tab:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: -2px;
+    }
+
+    .tab-panel {
+      padding: 8px 24px 20px;
+    }
+
+    .news-item {
+      padding: 16px 0;
+      border-bottom: 1px dashed var(--line);
+    }
+
+    .news-item:last-child {
+      border-bottom: none;
+    }
+
+    .news-title {
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .news-meta {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .news-tag {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 1px 8px;
+      border-radius: 999px;
+      background: #e8f0fe;
+      color: var(--accent);
+      font-size: 12px;
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 24px 12px;
+      }
+
+      .tab-nav {
+        padding: 0 8px;
+        overflow-x: auto;
+      }
+
+      .tab {
+        padding: 12px 10px;
+        white-space: nowrap;
+      }
+
+      .tab::after {
+        left: 10px;
+        right: 10px;
+      }
+
+      .tab-panel {
+        padding: 4px 16px 16px;
+      }
+    }
+  </style>
+  <!-- 外部引用可复用选项卡脚本 -->
+  <script src="js/tabs.js" defer></script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="page-title">新闻中心</h1>
+
+    <div class="tabs" data-tabs>
+      <div class="tab-nav" role="tablist" aria-label="新闻分类" data-tablist>
+        <button class="tab is-active" type="button" role="tab" id="tab-domestic"
+                data-tab="domestic" aria-selected="true" aria-controls="panel-domestic">
+          国内新闻
+        </button>
+        <button class="tab" type="button" role="tab" id="tab-provincial"
+                data-tab="provincial" aria-selected="false" aria-controls="panel-provincial">
+          省内新闻
+        </button>
+        <button class="tab" type="button" role="tab" id="tab-international"
+                data-tab="international" aria-selected="false" aria-controls="panel-international">
+          国际新闻
+        </button>
+        <button class="tab" type="button" role="tab" id="tab-hot"
+                data-tab="hot" aria-selected="false" aria-controls="panel-hot">
+          最热新闻
+        </button>
+      </div>
+
+      <section class="tab-panel is-active" id="panel-domestic" role="tabpanel"
+               data-panel="domestic" aria-labelledby="tab-domestic">
+        <article class="news-item">
+          <h2 class="news-title"><span class="news-tag">头条</span>全国多地启动冬季供暖保障工作</h2>
+          <p class="news-meta">2026-11-02 09:30 · 要闻</p>
+        </article>
+        <article class="news-item">
+          <h2 class="news-title">新一批国家级非物质文化遗产代表性项目公布</h2>
+          <p class="news-meta">2026-11-02 08:15 · 文化</p>
+        </article>
+        <article class="news-item">
+          <h2 class="news-title">多条高铁新线进入试运行阶段</h2>
+          <p class="news-meta">2026-11-01 20:40 · 交通</p>
+        </article>
+      </section>
+
+      <section class="tab-panel" id="panel-provincial" role="tabpanel"
+               data-panel="provincial" aria-labelledby="tab-provincial" hidden>
+        <article class="news-item">
+          <h2 class="news-title"><span class="news-tag">省内</span>全省高速公路年度养护工程完工</h2>
+          <p class="news-meta">2026-11-02 10:05 · 交通</p>
+        </article>
+        <article class="news-item">
+          <h2 class="news-title">省图书馆推出冬季阅读推广系列活动</h2>
+          <p class="news-meta">2026-11-01 16:20 · 民生</p>
+        </article>
+        <article class="news-item">
+          <h2 class="news-title">省内多所高校公布寒假放假安排</h2>
+          <p class="news-meta">2026-11-01 11:00 · 教育</p>
+        </article>
+      </section>
+
+      <section class="tab-panel" id="panel-international" role="tabpanel"
+               data-panel="international" aria-labelledby="tab-international" hidden>
+        <article class="news-item">
+          <h2 class="news-title"><span class="news-tag">国际</span>国际气候大会就减排目标展开磋商</h2>
+          <p class="news-meta">2026-11-02 07:50 · 国际</p>
+        </article>
+        <article class="news-item">
+          <h2 class="news-title">全球科技展会聚焦人工智能应用落地</h2>
+          <p class="news-meta">2026-11-01 19:10 · 科技</p>
+        </article>
+        <article class="news-item">
+          <h2 class="news-title">多国联合发布跨境旅游便利化措施</h2>
+          <p class="news-meta">2026-11-01 14:35 · 旅游</p>
+        </article>
+      </section>
+
+      <section class="tab-panel" id="panel-hot" role="tabpanel"
+               data-panel="hot" aria-labelledby="tab-hot" hidden>
+        <article class="news-item">
+          <h2 class="news-title"><span class="news-tag">热榜</span>年度城市生活满意度调查结果发布</h2>
+          <p class="news-meta">热度 9821 · 民生</p>
+        </article>
+        <article class="news-item">
+          <h2 class="news-title">国产动画电影票房创同期新高</h2>
+          <p class="news-meta">热度 8654 · 文娱</p>
+        </article>
+        <article class="news-item">
+          <h2 class="news-title">冬季运动装备销量持续增长</h2>
+          <p class="news-meta">热度 7310 · 消费</p>
+        </article>
+      </section>
+    </div>
+  </div>
+</body>
+</html>

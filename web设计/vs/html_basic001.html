@@ -1,0 +1,134 @@
+<!--英文叹号回车生成基础页面结构 -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的第一个网页</title>
+</head>
+<body>
+    <h2>1.标题</h2>
+    <!-- 一共6级标题h1-h6 -->
+    <h1>一级标题</h1>
+    <h2>二级标题</h2>
+    <h3>三级标题</h3>
+    <h4>四级标题</h4>
+    <h5>五级标题</h5>
+    <h6>六级标题，最小的标题</h6>
+
+    <h2>2.段落</h2>
+    <p> <!-- 常用的强调的两种方式：斜体em和加粗strong，下划线u,删除线s -->
+        段落的<em>特点</em>：段落内容<strong>自动换行</strong>，<br>
+        有<u>自带</u>的间距。<s>需要删除的</s>
+    </p>
+    <hr>
+
+    <h2>3.超链接和图片</h2>
+    <a href="http://baidu.com" target="_blank">百度</a>
+    <img src="./img/1.jpg" alt="百度logo">
+
+    <h2>4.列表</h2>
+    <h3>我喜欢做的事情</h3>
+    <ul>
+        <li>打游戏</li>
+        <li>看电影</li>
+        <li>看书</li>
+    </ul>
+    <ol type="A">
+        <li>数学</li>
+        <li>语文</li>
+        <li>英语</li>
+    </ol>
+    <h2>5.表格</h2>
+    <!--cellspacing 是单元格之间的间距，cellpadding 是单元格内容与边框之间的间距 -->
+    <body border="2" cellspacing="0" cellpadding="3">
+            <caption>学生信息表</caption>
+            <!-- (tr>td*3) *4回车实现的是三行四列的表格 -->
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>班级</th>
+        </tr>
+        <tr>
+            <td>倪铭浩</td>
+            <td>18</td>
+            <td>男</td>
+            <td>高三(9)班</td>
+        </tr>
+        <tr>
+            <td>李四</td>
+            <td>20</td>
+            <td>女</td>
+            <td>高三(2)班</td>
+        </tr>
+    </body>
+    <h2>6.div块级元素</h2>
+    <div style="background:yellow;"
+    <p>div特点1:独占一整行，自动前后换行，是块级元素</p>
+    <p>div特点2:可以嵌套任意标签(标题、段落、图片、列表都能放)</p>
+    </div>
+    <div style="background:pink;">
+    <p>div特点1:独占一整行，自动前后换行，是块级元素</p>
+    <p>div特点2:可以嵌套任意标签(标题、段落、图片、列表都能放)</p>
+    </div>
+    <h2>H5语义</h2>
+    <!-- header、nav、section、article、footer、aside本质上都是div -->
+    <header>头部</header>
+    <nav>导航条</nav>
+    <section>内容x域</section>
+    <article>文章区域</article>
+    <footer>页脚</footer>
+    <aside>侧边栏</aside>
+    <form action="http://baidu.com" name="fm" method="post">
+    <p>用户名:
+        <input type="text" placeholder="请输入用户名" required>
+    </p>
+    <p>
+        <label for="pwd">密码: </label>
+        <!-- label的for属性对应input的id属性，
+             点击label标签，会自动聚焦到input输入框 -->
+        <input type="password" name="pwd" id="pwd">
+    </p>
+    <!-- h5出现的内容 -->
+    <p>邮箱:
+        <input type="email" name="email" id="email">
+    </p>
+    <p>请上传文件:
+        <input type="file" name="file" id="file" multiple>
+        </input>
+    </p>
+    <p>
+        性别:
+        <input type="radio" name="gender" value="f">女
+        <input type="radio" name="gender" value="m">男
+    </p>
+    <p>
+        爱好:
+        <input type="checkbox" name="hobby" value="c"> coding </input>
+        <input type="checkbox" name="hobby" value="s"> playing</input>
+        <input type="checkbox" name="hobby" value="r"> reading</input>
+    </p>
+    <p>
+        自我介绍:
+        <textarea name="intro" id="intro" cols="30" rows="10"></textarea>
+    </p>
+    <p>
+        籍贯:
+        <select name="city" id="city">
+            <option value="beijing">北京</option>
+            <option value="shanghai">上海</option>
+            <option value="guangzhou">广州</option>
+        </select>
+    </p>
+    <p>
+        <input type="submit" value="提交">
+        <input type="reset" value="重置">
+        <input type="button" value="取消"></input>
+    </p>
+    </input>
+    </p>
+</form>
+
+</body>
+</html>

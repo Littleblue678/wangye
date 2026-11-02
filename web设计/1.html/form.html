@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言表单子页面</title>
+    <link rel="stylesheet" href="./html_basic.css">
+</head>
+<body>
+    <h2 class="title-demo">独立留言表单页面</h2>
+
+    <form action="http://baidu.com" name="fm" method="post">
+        <p>用户名：
+            <input type="text" placeholder="请输入用户名" required>
+        </p>
+        <p>
+            <label for="pwd">密码：</label>
+            <input type="password" name="pwd" id="pwd">
+        </p>
+        <p>邮箱：
+            <input type="email" name="email" id="email">
+        </p>
+        <p>上传文件：
+            <input type="file" name="file" id="file" multiple>
+        </p>
+        <p>性别：
+            <input type="radio" name="gender" value="f">女
+            <input type="radio" name="gender" value="m">男
+        </p>
+        <p>兴趣爱好：
+            <input type="checkbox" name="hobby" value="c"> coding
+            <input type="checkbox" name="hobby" value="s"> playing
+            <input type="checkbox" name="hobby" value="r"> reading
+        </p>
+        <p>留言内容：
+            <textarea name="intro" id="intro" cols="30" rows="8"></textarea>
+        </p>
+        <p>籍贯选择：
+            <select name="city" id="city">
+                <option value="beijing">北京</option>
+                <option value="shanghai">上海</option>
+                <option value="xinjiang">新疆</option>
+            </select>
+        </p>
+        <p>
+            <input type="submit" value="提交">
+            <input type="reset" value="重置">
+            <input type="button" value="取消">
+        </p>
+    </form>
+
+    <br>
+   <a href="html_basic004.html">← 返回自我介绍主页</a>
+
+</body>
+</html>

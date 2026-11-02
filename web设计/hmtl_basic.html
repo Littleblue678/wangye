@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<!--英文叹号回车  -->
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <div>
+    <title>周丽的自我介绍</title>
+    </div>
+    <link rel="stylesheet" href="./html_basic.css">
+</head>
+
+<body>
+    <header class="top-header">
+        <h1>大家好，我是周丽</h1>
+        <p>一名热爱美食的学生 | 很高兴认识你</p>
+    </header>
+
+    <!-- 导航条 -->
+    <nav>
+        <a href="./form.html" target="_blank">去填写信息（表单子页面）</a>
+    </nav>
+
+    <h2 class="title-demo">1.标题</h2>
+    <!-- 一共6级标题h1-h6 -->
+    <h1>我的名字周丽</h1>
+    <h2>自我介绍</h2>
+    <h3>基本情况</h3>
+    <h4>兴趣爱好</h4>
+    <h5>表格</h5>
+    <h6>联系方式</h6>
+
+    <h2 class="title-demo">2.自我介绍</h2>
+    <p class="text-cont">
+        性格外向活泼，可以跟大部分人聊得来，随和，能融洽处理自己的交友关系，喜欢帮助别人，有团队合作精神。
+    </p>
+    <!-- 常用的强调的两种方式：斜体em和加粗strong,下划线u,删除线s -->
+    <p>
+        除此之外，我还是一个<strong>热爱美食</strong>的女生，平时最喜欢的事情就是<em>研究各种菜谱</em>。<br>
+        我<u>最擅长</u>做的是家常菜<s>，但是以前的我只会煮泡面</s>
+    </p>
+    <hr>
+
+    <h2 class="title-demo">3.基本情况</h2>
+    <section id="info" class="info-card">
+        <div class="info-left">
+            <h3>基本信息</h3>
+            <!-- dl/dt/dd 描述列表，用来展示"姓名：周丽"这种键值对 -->
+            <dl class="basic-list">
+                <dt>姓名：周丽</dt>
+                <dt>学校：大连东软信息学院</dt>
+                <dt>专业：计算机科学与技术</dt>
+                <dt>班级：计算机24005</dt>
+                <dt>学号：24001010532</dt>
+                <dt>家乡：四川</dt>
+                <dt>星座：巨蟹座</dt>
+                <dt>座右铭：生活就像一道菜，用心调味才精彩。</dt>
+            </dl>
+        </div>
+        <img src="./img/1.jpg" alt="周丽的头像">
+    </section>
+
+    <h2 class="title-demo">4.兴趣爱好</h2>
+    <h3>我喜欢做的事情</h3>
+    <ul class="list-demo">
+        <li>追剧</li>
+        <li>看美食纪录片</li>
+        <li>和朋友聚餐</li>
+    </ul>
+    <h3>我不喜欢做的事情</h3>
+    <ul class="list-demo">
+        <li>锻炼</li>
+        <li>跑步</li>
+        <li>学习</li>
+    </ul>
+    <ol type="A">
+        <li>数学</li>
+        <li>英语</li>
+        <li>语文</li>
+    </ol>
+
+    <h2 class="title-demo">5.表格</h2>
+    <!-- cellspacing是单元格之间的距离，
+     cellpadding="3"是单元格内容与边框之间的距离 -->
+    <table id="user-table" border="2" cellspacing="0" cellpadding="3">
+        <caption>用户信息表</caption>
+        <tr>
+            <th>姓名</th>
+            <th>年龄</th>
+            <th>性别</th>
+            <th>城市</th>
+        </tr>
+        <tr>
+            <td>周丽</td>
+            <td>18</td>
+            <td>女</td>
+            <td>四川</td>
+        </tr>
+    </table>
+
+    <h2 class="title-demo">6.联系方式</h2>
+    <div class="contact-box">
+        <p>邮箱：zhouli@example.com</p>
+        <p>微信：zhouli_2024</p>
+    </div>
+
+
+    <footer class="page-footer">
+        <p>想了解更多或联系我，可以<a href="./form.html" target="_blank">去填写信息</a>（表单单独放在子页面）。</p>
+        <p>© 2024 周丽的自我介绍页面</p>
+    </footer>
+
+</body>
+
+</html>
