@@ -1,48 +1,223 @@
 <!DOCTYPE html>
+<!--
+  作者：王烨
+  建立时间：2026-11-02
+  使用模型：DeepSeek-V4.1-Flash
+  功能名称：影视排行榜选项卡
+  功能简介：按每日、每周、每月、全部切换的影视热度排行榜，前 3 名红色序号，其余灰色序号。
+-->
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-  <title>抓小球</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>影视排行榜</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px 16px;
+      background: #f2f2f2;
+      color: #333;
+      font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", Arial, sans-serif;
+    }
+
+    .rank-widget {
+      width: 100%;
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .tab-nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border: 1px solid #dcdcdc;
+      background: #f2f2f2;
+    }
+
+    .tab {
+      padding: 10px 0;
+      border: none;
+      border-right: 1px solid #f2f2f2;
+      background: #e9e9e9;
+      color: #333;
+      font: inherit;
+      font-size: 15px;
+      line-height: 20px;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .tab:last-child {
+      border-right: none;
+    }
+
+    .tab:hover {
+      background: #dedede;
+    }
+
+    .tab.is-active {
+      background: #757575;
+      color: #fff;
+    }
+
+    .tab:focus-visible,
+    .tab.is-active:focus-visible {
+      outline: 2px solid #c93737;
+      outline-offset: -2px;
+    }
+
+    .tab-panel {
+      padding: 16px 2px 2px;
+    }
+
+    .rank-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      column-gap: 24px;
+      row-gap: 18px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .rank-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .rank-no {
+      flex: 0 0 20px;
+      width: 20px;
+      height: 20px;
+      border-radius: 3px;
+      background: #bdbdbd;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 20px;
+      text-align: center;
+    }
+
+    .rank-item.is-top .rank-no {
+      background: #c93737;
+    }
+
+    .rank-name {
+      overflow: hidden;
+      color: #222;
+      font-size: 15px;
+      line-height: 22px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    .rank-item:hover .rank-name {
+      color: #c93737;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 24px 12px;
+      }
+
+      .tab {
+        font-size: 14px;
+      }
+
+      .rank-list {
+        column-gap: 12px;
+        row-gap: 14px;
+      }
+
+      .rank-name {
+        font-size: 13px;
+      }
+    }
+  </style>
+  <!-- 外部引用可复用选项卡脚本 -->
+  <script src="js/tabs.js" defer></script>
 </head>
 <body>
-  <div id="app">
-    <!-- 顶部信息栏：实时分数 + 倒计时 -->
-    <header id="hud">
-      <div class="hud-item">分数：<span id="score">0</span></div>
-      <div class="hud-item">时间：<span id="timer">02:00</span></div>
-    </header>
-
-    <!-- 游戏舞台：小球与特效层 -->
-    <main id="stage">
-      <div id="ball" hidden></div>
-      <div id="fx-layer" aria-hidden="true"></div>
-    </main>
-
-    <!-- 开始遮罩 -->
-    <div id="start-overlay" class="overlay">
-      <div class="panel">
-        <h1>抓小球</h1>
-        <p class="hint">2 分钟内点击蓝色小球得 2 分，点空白扣 1 分</p>
-        <button id="start-btn" type="button">开始游戏</button>
-      </div>
+  <main class="rank-widget" data-tabs>
+    <div class="tab-nav" role="tablist" aria-label="排行榜统计范围" data-tablist>
+      <button class="tab is-active" type="button" role="tab" id="tab-daily"
+              data-tab="daily" aria-selected="true" aria-controls="panel-daily">每日</button>
+      <button class="tab" type="button" role="tab" id="tab-weekly"
+              data-tab="weekly" aria-selected="false" aria-controls="panel-weekly">每周</button>
+      <button class="tab" type="button" role="tab" id="tab-monthly"
+              data-tab="monthly" aria-selected="false" aria-controls="panel-monthly">每月</button>
+      <button class="tab" type="button" role="tab" id="tab-all"
+              data-tab="all" aria-selected="false" aria-controls="panel-all">全部</button>
     </div>
 
-    <!-- 结算弹窗 -->
-    <div id="end-overlay" class="overlay" hidden>
-      <div class="panel">
-        <h2>游戏结束</h2>
-        <p>最终得分：<strong id="final-score">0</strong></p>
-        <p>历史最高分：<strong id="high-score">0</strong></p>
-        <p id="new-record" class="new-record" hidden>新纪录！</p>
-        <button id="restart-btn" type="button">重新开始</button>
-      </div>
-    </div>
-  </div>
+    <section class="tab-panel is-active" id="panel-daily" role="tabpanel"
+             data-panel="daily" aria-labelledby="tab-daily">
+      <ul class="rank-list">
+        <li class="rank-item is-top"><span class="rank-no">1</span><span class="rank-name">最美的时光</span></li>
+        <li class="rank-item is-top"><span class="rank-no">2</span><span class="rank-name">咱们结婚吧</span></li>
+        <li class="rank-item is-top"><span class="rank-no">3</span><span class="rank-name">渗透</span></li>
+        <li class="rank-item"><span class="rank-no">4</span><span class="rank-name">继承者们</span></li>
+        <li class="rank-item"><span class="rank-no">5</span><span class="rank-name">烽火佳人</span></li>
+        <li class="rank-item"><span class="rank-no">6</span><span class="rank-name">极品女士第2季</span></li>
+        <li class="rank-item"><span class="rank-no">7</span><span class="rank-name">爱闪亮</span></li>
+        <li class="rank-item"><span class="rank-no">8</span><span class="rank-name">狼烟（2013）</span></li>
+        <li class="rank-item"><span class="rank-no">9</span><span class="rank-name">钱多多炼爱记</span></li>
+        <li class="rank-item"><span class="rank-no">10</span><span class="rank-name">苍狼</span></li>
+      </ul>
+    </section>
 
-  <!-- 经典脚本（非 ES module），保证 file:// 双击即可运行 -->
-  <script src="game-core.js"></script>
-  <script src="script.js"></script>
+    <section class="tab-panel" id="panel-weekly" role="tabpanel"
+             data-panel="weekly" aria-labelledby="tab-weekly" hidden>
+      <ul class="rank-list">
+        <li class="rank-item is-top"><span class="rank-no">1</span><span class="rank-name">咱们结婚吧</span></li>
+        <li class="rank-item is-top"><span class="rank-no">2</span><span class="rank-name">继承者们</span></li>
+        <li class="rank-item is-top"><span class="rank-no">3</span><span class="rank-name">最美的时光</span></li>
+        <li class="rank-item"><span class="rank-no">4</span><span class="rank-name">爱闪亮</span></li>
+        <li class="rank-item"><span class="rank-no">5</span><span class="rank-name">渗透</span></li>
+        <li class="rank-item"><span class="rank-no">6</span><span class="rank-name">狼烟（2013）</span></li>
+        <li class="rank-item"><span class="rank-no">7</span><span class="rank-name">三十岁，你好</span></li>
+        <li class="rank-item"><span class="rank-no">8</span><span class="rank-name">钱多多炼爱记</span></li>
+        <li class="rank-item"><span class="rank-no">9</span><span class="rank-name">特种兵之火凤凰</span></li>
+        <li class="rank-item"><span class="rank-no">10</span><span class="rank-name">极品女士第2季</span></li>
+      </ul>
+    </section>
+
+    <section class="tab-panel" id="panel-monthly" role="tabpanel"
+             data-panel="monthly" aria-labelledby="tab-monthly" hidden>
+      <ul class="rank-list">
+        <li class="rank-item is-top"><span class="rank-no">1</span><span class="rank-name">特种兵之火凤凰</span></li>
+        <li class="rank-item is-top"><span class="rank-no">2</span><span class="rank-name">咱们结婚吧</span></li>
+        <li class="rank-item is-top"><span class="rank-no">3</span><span class="rank-name">继承者们</span></li>
+        <li class="rank-item"><span class="rank-no">4</span><span class="rank-name">金玉满堂</span></li>
+        <li class="rank-item"><span class="rank-no">5</span><span class="rank-name">王的女人</span></li>
+        <li class="rank-item"><span class="rank-no">6</span><span class="rank-name">爱闪亮</span></li>
+        <li class="rank-item"><span class="rank-no">7</span><span class="rank-name">爱情面前谁怕谁</span></li>
+        <li class="rank-item"><span class="rank-no">8</span><span class="rank-name">英雄联盟</span></li>
+        <li class="rank-item"><span class="rank-no">9</span><span class="rank-name">小爸爸</span></li>
+        <li class="rank-item"><span class="rank-no">10</span><span class="rank-name">我们这拨人</span></li>
+      </ul>
+    </section>
+
+    <section class="tab-panel" id="panel-all" role="tabpanel"
+             data-panel="all" aria-labelledby="tab-all" hidden>
+      <ul class="rank-list">
+        <li class="rank-item is-top"><span class="rank-no">1</span><span class="rank-name">永不磨灭的番号</span></li>
+        <li class="rank-item is-top"><span class="rank-no">2</span><span class="rank-name">特种兵之火凤凰</span></li>
+        <li class="rank-item is-top"><span class="rank-no">3</span><span class="rank-name">新还珠格格</span></li>
+        <li class="rank-item"><span class="rank-no">4</span><span class="rank-name">咱们结婚吧</span></li>
+        <li class="rank-item"><span class="rank-no">5</span><span class="rank-name">小爸爸</span></li>
+        <li class="rank-item"><span class="rank-no">6</span><span class="rank-name">心术</span></li>
+        <li class="rank-item"><span class="rank-no">7</span><span class="rank-name">乡村爱情5</span></li>
+        <li class="rank-item"><span class="rank-no">8</span><span class="rank-name">天天有喜</span></li>
+        <li class="rank-item"><span class="rank-no">9</span><span class="rank-name">一不小心爱上你</span></li>
+        <li class="rank-item"><span class="rank-no">10</span><span class="rank-name">夏日甜心</span></li>
+      </ul>
+    </section>
+  </main>
 </body>
 </html>
