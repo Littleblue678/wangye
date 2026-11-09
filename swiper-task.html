@@ -84,6 +84,33 @@
   .wy-fx button:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(29,91,191,.18)}
   .wy-fx button.wy-on{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;border-color:transparent}
 
+  /* 任务一 · 提示词两轮对照（效果 + 代码并排） */
+  .wy-prompt-link{display:inline-block;margin-top:16px;text-decoration:none;font-size:13.5px;font-weight:bold;color:#0f2b5b;background:#e8f0ff;border:1px solid #c7d8f8;border-radius:999px;padding:9px 22px;transition:all .2s}
+  .wy-prompt-link:hover{background:#dbe7ff;transform:translateY(-2px)}
+  .wy-cmp{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0 6px}
+  .wy-cmp-card{border:1px solid #e5e7eb;border-radius:14px;padding:16px 18px;background:#fff}
+  .wy-cmp-card.wy-bad{border-color:#fca5a5;box-shadow:0 6px 16px rgba(185,28,28,.08)}
+  .wy-cmp-card.wy-good{border-color:#86efac;box-shadow:0 6px 16px rgba(21,128,61,.1)}
+  .wy-cmp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .wy-cmp-round{font-size:12.5px;color:#6b7280;letter-spacing:1px}
+  .wy-cmp-tag{font-size:12px;padding:3px 10px;border-radius:999px}
+  .wy-cmp-tag.wy-tag-bad{background:#fee2e2;color:#b91c1c}
+  .wy-cmp-tag.wy-tag-good{background:#dcfce7;color:#15803d}
+  .wy-cmp-card h4{font-size:15px;color:#111827;margin-bottom:6px}
+  .wy-cmp-desc{font-size:13px;color:#4b5563;line-height:1.9;margin-bottom:10px}
+  .wy-mini{position:relative}
+  .wy-mini .swiper{height:170px;border-radius:10px}
+  .wy-mini .swiper-slide{height:170px;position:relative}
+  .wy-mini .swiper-slide img{width:100%;height:100%;object-fit:cover;display:block}
+  .wy-mini .wy-cap{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 8px;color:#fff;background:linear-gradient(transparent,rgba(5,15,35,.82))}
+  .wy-mini .wy-cap h3{font-size:14px}
+  .wy-mini .wy-cap p{font-size:11.5px}
+  .wy-mini .swiper-pagination{position:static;margin-top:10px}
+  .wy-verify{font-size:12.5px;color:#374151;margin-top:8px;padding:7px 10px;background:#f9fafb;border-radius:8px}
+  .wy-verify b{color:#0f2b5b}
+  .wy-code{background:#0f172a;color:#d6e2f5;border-radius:10px;padding:12px 14px;font-size:12.5px;line-height:1.9;font-family:Consolas,monospace;white-space:pre;overflow:auto;margin:10px 0 0}
+  @media (max-width:760px){.wy-cmp{grid-template-columns:1fr}}
+
   /* AI 提示词与答辩记录 */
   .wy-log{border:1px solid #e8ecf5;border-radius:12px;padding:14px 18px;margin-bottom:12px;background:#fbfcff}
   .wy-log summary{cursor:pointer;font-weight:bold;color:#0f2b5b;font-size:14.5px}
@@ -106,7 +133,7 @@
     <span class="wy-badge">高 职 · 高 级 网 页 设 计 · 课 堂 操 作 任 务</span>
     <h1>Swiper 轮播组件 · <b>大国重器光影展（学生版 · 王烨）</b></h1>
     <p>已完成 4 个基础轮播 + 三个加分任务：<b>任务一</b> 提示词迭代生成 cube 配置、<b>任务二</b> 自学 creative 第 7 种效果「电影墙」、<b>任务三</b> 第六件展品「爱达·魔都号」+ keyboard 键盘控制（方向键 ← → 可翻页）。</p>
-    <div class="wy-goals"><i>任务 1 · 最小轮播</i><i>任务 2 · 圆点+箭头</i><i>任务 3 · 自动翻页</i><i>任务 4 · 七种效果随心换</i><a href="#wyAiLog">📋 AI 提示词与答辩记录 ↓</a></div>
+    <div class="wy-goals"><i>任务 1 · 最小轮播</i><i>任务 2 · 圆点+箭头</i><i>任务 3 · 自动翻页</i><i>任务 4 · 七种效果随心换</i><a href="#wy-prompt">📋 任务一提示词两轮对照 ↓</a></div>
   </div>
 
   <div class="wy-rule">
@@ -138,6 +165,7 @@
         </div>
       </div>
     </div>
+    <a class="wy-prompt-link" href="#wy-prompt">📋 任务一 · 提示词两轮对照（效果 + 代码）→</a>
   </div>
 
   <!-- 任务 2 -->
@@ -232,15 +260,67 @@
     </div>
   </div>
 
-  <!-- AI 提示词与答辩记录（提交物访问入口） -->
-  <div class="wy-sec" id="wyAiLog">
+  <!-- wy-prompt：任务一提示词两轮对照（效果 + 代码同屏） -->
+  <div class="wy-sec" id="wy-prompt">
     <div class="wy-sec-head">
       <span class="wy-no">✎</span>
-      <h2>AI 提示词与答辩记录<small>任务一 / 二 / 三 提交物访问入口</small></h2>
+      <h2>任务一 · 提示词两轮对照<small>圆点只能看 → 圆点能点：效果与代码同屏</small></h2>
+    </div>
+    <p class="wy-txt">同样一句"加个圆点分页器"，第 1 轮 AI 只画出了圆点，第 2 轮补上 <code>clickable: true</code> 才真正能点。<b>下面的两个轮播都是真的能拖的</b>，可以直接点圆点对比：左边点了不会跳，右边点了立即跳。</p>
+
+    <div class="wy-cmp">
+      <div class="wy-cmp-card wy-bad">
+        <div class="wy-cmp-top">
+          <span class="wy-cmp-round">第 1 轮</span>
+          <span class="wy-cmp-tag wy-tag-bad">漏了需求</span>
+        </div>
+        <h4>圆点只能看，不能点</h4>
+        <p class="wy-cmp-desc">提示词只写了"加个圆点分页器"。AI 理解为"把圆点画出来"，于是只给了 <code>el</code>，没给 <code>clickable</code>（默认 false）。</p>
+        <div class="wy-mini">
+          <div class="swiper" id="wySwBad">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>第 1 轮 · 圆点点击无效</p></div></div>
+              <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>第 1 轮 · 圆点点击无效</p></div></div>
+              <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>第 1 轮 · 圆点点击无效</p></div></div>
+            </div>
+            <div class="swiper-pagination" id="wyPagBad"></div>
+          </div>
+        </div>
+        <div class="wy-verify">点第 3 个圆点 → 当前索引 <b id="wyIdxBad">0</b> · <span id="wyMsgBad">没有跳转</span></div>
+        <pre class="wy-code">pagination: {
+  el: '#wyPagBad'
+}</pre>
+      </div>
+
+      <div class="wy-cmp-card wy-good">
+        <div class="wy-cmp-top">
+          <span class="wy-cmp-round">第 2 轮</span>
+          <span class="wy-cmp-tag wy-tag-good">补充需求</span>
+        </div>
+        <h4>圆点是遥控器，不是装饰</h4>
+        <p class="wy-cmp-desc">第 2 轮把需求写成"圆点必须能点击直接跳转，不是只能看"。同一个 AI，立刻补上了 <code>clickable: true</code>。</p>
+        <div class="wy-mini">
+          <div class="swiper" id="wySwGood">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="wy-cap"><h3>天宫空间站</h3><p>第 2 轮 · 圆点可点击跳转</p></div></div>
+              <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>第 2 轮 · 圆点可点击跳转</p></div></div>
+              <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>第 2 轮 · 圆点可点击跳转</p></div></div>
+            </div>
+            <div class="swiper-pagination" id="wyPagGood"></div>
+          </div>
+        </div>
+        <div class="wy-verify">点第 3 个圆点 → 当前索引 <b id="wyIdxGood">0</b> · <span id="wyMsgGood">试试点圆点</span></div>
+        <pre class="wy-code">pagination: {
+  el: '#wyPagGood',
+  clickable: true
+}</pre>
+      </div>
     </div>
 
+    <p class="wy-txt" style="margin-top:16px"><b>要点：</b><code>el</code> 只负责"把圆点画在哪里"，<code>clickable: true</code> 才让圆点绑定点击跳转；不写它，圆点就只是装饰。</p>
+
     <details class="wy-log" open>
-      <summary>任务一 · 提示词工程师（2 轮迭代 + 验证结论）</summary>
+      <summary>任务一 · 提示词工程师（2 轮原文 + 验证结论）</summary>
       <h4>第 1 轮提示词（有遗漏）</h4>
       <pre>帮我写 Swiper 11 的初始化代码：选择器 #wySw4，要无缝循环，每 3.2 秒自动翻页，
 用户手动拖动后自动播放不能停，底部分页器用 #wyPag4。</pre>
@@ -302,6 +382,35 @@
 
   // ── 任务 1：初始化 #wySw1，让它至少可以拖动 ──
   var wySw1 = new Swiper("#wySw1", {});
+
+  // ── 任务一 · 两轮提示词对照：第 1 轮漏 clickable，第 2 轮补上 ──
+  // 第 1 轮（错误示范）：只有 el，圆点点了不会跳转
+  var wySwBad = new Swiper("#wySwBad", {
+    pagination: {
+      el: "#wyPagBad",
+    },
+  });
+
+  // 第 2 轮（修正后）：补上 clickable: true，圆点可点击跳转
+  var wySwGood = new Swiper("#wySwGood", {
+    pagination: {
+      el: "#wyPagGood",
+      clickable: true,
+    },
+  });
+
+  // 实时显示当前索引，方便对比"点圆点到底有没有跳"
+  wySwBad.on('slideChange', function () {
+    document.getElementById('wyIdxBad').textContent = wySwBad.realIndex;
+    document.getElementById('wyMsgBad').textContent = '没有跳转';
+  });
+  wySwGood.on('slideChange', function () {
+    document.getElementById('wyIdxGood').textContent = wySwGood.realIndex;
+    document.getElementById('wyMsgGood').textContent = '已跳转';
+  });
+  document.getElementById('wyPagGood').addEventListener('click', function () {
+    document.getElementById('wyMsgGood').textContent = '已跳转';
+  });
 
   // ── 任务 2：初始化 #wySw2，循环 + 600ms + 圆点可点 + 箭头切换 ──
   var wySw2 = new Swiper("#wySw2", {
