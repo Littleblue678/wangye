@@ -1,10 +1,17 @@
 <!DOCTYPE html>
+<!--
+  作者：王烨
+  建立时间：2026-11-09
+  使用模型：Kimi-K3
+  功能名称：Swiper 课堂操作任务 · 大国重器光影展（含任务一/二/三加分项）
+  功能简介：4 个轮播演示 + 任务一提示词迭代记录 + 任务二 creative 电影墙 + 任务三第六件展品与 keyboard 超纲能力。
+  命名规则：所有 CSS 类名、id、JS 变量均以 wy 开头。
+-->
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Swiper 课堂操作任务 · 大国重器光影展 · 补全 JS</title>
-<!-- Swiper 官方组件库已通过 CDN 引入好，学生只需在底部 <script> 中写初始化代码 -->
+<title>Swiper 课堂操作任务 · 大国重器光影展 · 王烨</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <style>
@@ -19,7 +26,8 @@
   .wy-head h1 b{color:#ffd166}
   .wy-head p{margin-top:12px;font-size:14.5px;color:#d9e3f5;line-height:2}
   .wy-goals{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
-  .wy-goals i{font-style:normal;font-size:13px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);padding:6px 14px;border-radius:8px}
+  .wy-goals i,.wy-goals a{font-style:normal;font-size:13px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);padding:6px 14px;border-radius:8px;color:#fff;text-decoration:none}
+  .wy-goals a{background:rgba(255,209,102,.25);border-color:#ffd166}
 
   /* 任务说明框 */
   .wy-rule{background:#fffbea;border:1px solid #fde68a;border-radius:16px;padding:18px 22px;margin-bottom:30px;font-size:14px;color:#7c5e10;line-height:2}
@@ -76,6 +84,14 @@
   .wy-fx button:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(29,91,191,.18)}
   .wy-fx button.wy-on{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;border-color:transparent}
 
+  /* AI 提示词与答辩记录 */
+  .wy-log{border:1px solid #e8ecf5;border-radius:12px;padding:14px 18px;margin-bottom:12px;background:#fbfcff}
+  .wy-log summary{cursor:pointer;font-weight:bold;color:#0f2b5b;font-size:14.5px}
+  .wy-log h4{font-size:13.5px;color:#15803d;margin:12px 0 4px}
+  .wy-log p{font-size:13.5px;color:#374151;line-height:2}
+  .wy-log pre{background:#f3f4f6;border-radius:8px;padding:10px 12px;font-size:12.5px;line-height:1.8;white-space:pre-wrap;font-family:Consolas,"Microsoft YaHei",monospace;color:#374151;margin:4px 0}
+  .wy-log .wy-ok{color:#16a34a;font-weight:bold}
+
   .wy-back{text-align:center;margin-top:28px}
   .wy-back a{display:inline-block;text-decoration:none;color:#0f2b5b;font-size:14.5px;font-weight:bold;background:#fff;border:1px solid #dbe4ff;border-radius:999px;padding:10px 26px;transition:transform .2s,box-shadow .2s}
   .wy-back a:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,43,91,.15)}
@@ -88,18 +104,16 @@
 
   <div class="wy-head">
     <span class="wy-badge">高 职 · 高 级 网 页 设 计 · 课 堂 操 作 任 务</span>
-    <h1>Swiper 轮播组件 · <b>大国重器光影展（学生版）</b></h1>
-    <p>HTML 骨架和 CSS 样式已经全部搭好，图片也备齐了——但这个页面的轮播<b>一个都不会动</b>！
-    因为所有 <b>&lt;script&gt; 里的 JS 初始化代码都被抽走了</b>。你的任务：把 4 个轮播全部"救活"。</p>
-    <div class="wy-goals"><i>任务 1 · 救活最小轮播</i><i>任务 2 · 装上圆点和箭头</i><i>任务 3 · 让它自己翻页</i><i>任务 4 · 六种效果随心换</i></div>
+    <h1>Swiper 轮播组件 · <b>大国重器光影展（学生版 · 王烨）</b></h1>
+    <p>已完成 4 个基础轮播 + 三个加分任务：<b>任务一</b> 提示词迭代生成 cube 配置、<b>任务二</b> 自学 creative 第 7 种效果「电影墙」、<b>任务三</b> 第六件展品「爱达·魔都号」+ keyboard 键盘控制（方向键 ← → 可翻页）。</p>
+    <div class="wy-goals"><i>任务 1 · 最小轮播</i><i>任务 2 · 圆点+箭头</i><i>任务 3 · 自动翻页</i><i>任务 4 · 七种效果随心换</i><a href="#wyAiLog">📋 AI 提示词与答辩记录 ↓</a></div>
   </div>
 
   <div class="wy-rule">
-    <b>📋 任务说明（先读再动手）：</b><br>
-    ① Swiper 组件库已通过 CDN 引入（页面第 8、9 行），<b>不需要</b>再写引入代码；<br>
-    ② 每个"演示台"下面的绿色卡片就是该任务的要求，JS 代码统一写在页面最底部的 <code>&lt;script&gt;</code> 区域内；<br>
-    ③ 每完成一个任务就<b>刷新页面验证</b>：能拖、能点、会自己翻，才算通过；<br>
-    ④ 控制台（F12）报错是你要最好的朋友——先读报错，再改代码。
+    <b>📋 加分任务完成说明：</b><br>
+    ① 任务一：4 条硬需求（无缝循环 / 3.2 秒自动翻页且手动后不停止 / 圆点可点击 / 初始 cube）经 <b>2 轮提示词迭代</b> 生成，记录在页面底部；<br>
+    ② 任务二：演示四新增第 7 个按钮 <b>「creative 电影墙」</b>，上一张缩小左移带角度、下一张放大右移进场；<br>
+    ③ 任务三：6 件展品齐（新增<b>爱达·魔都号</b>，AI 生成 16:9 图），演示四支持 <b>keyboard 键盘方向键</b> 翻页（课堂未讲）。
   </div>
 
   <!-- 任务 1 -->
@@ -108,14 +122,9 @@
       <span class="wy-no">1</span>
       <h2>救活最小轮播<small>三行 JS · 让照片可以拖动</small></h2>
     </div>
-    <p class="wy-txt">下面是"最小轮播"骨架：三层结构齐全，但因为没有初始化，照片<b>僵在第一张</b>。请写出初始化代码，让它至少<b>可以按住拖动</b>。</p>
-    <div class="wy-req">
-      <h3>✍️ 任务 1 要求</h3>
-      <p>在页面底部 <code>&lt;script&gt;</code> 中初始化 <code>#wySw1</code>，让它成为可拖动的轮播（最基础写法，一个空配置对象即可）。</p>
-      <span class="wy-star">⭐ 验证标准：按住鼠标左右拖动，照片能跟着手走</span>
-    </div>
+    <p class="wy-txt">最基础的写法：一个空配置对象即可让轮播可拖动。</p>
     <div class="wy-demo">
-      <span class="wy-demo-tag">🎛️ 演示一 · 最小轮播（救活后按住拖一拖）</span>
+      <span class="wy-demo-tag">🎛️ 演示一 · 最小轮播（按住拖一拖）</span>
       <div class="wy-swiper">
         <div class="swiper" id="wySw1">
           <div class="swiper-wrapper">
@@ -124,6 +133,7 @@
             <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>2023 年商业首航 · 国产干线客机翱翔蓝天</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>10909 米 · 触碰地球第四极马里亚纳海沟</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>500 米口径 · 世界最大单口径射电望远镜</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>首艘国产大型邮轮 · 2024 年 1 月首航</p></div></div>
           </div>
         </div>
       </div>
@@ -136,12 +146,7 @@
       <span class="wy-no">2</span>
       <h2>装上遥控器<small>pagination 圆点 + navigation 箭头</small></h2>
     </div>
-    <p class="wy-txt">HTML 里已经埋好了三个"遥控器"元素：<code>#wyPag2</code>（圆点）、<code>#wyPrev2</code> / <code>#wyNext2</code>（左右箭头）。请通过配置让它们"通电"。</p>
-    <div class="wy-req">
-      <h3>✍️ 任务 2 要求</h3>
-      <p>初始化 <code>#wySw2</code>，实现 4 个效果：<b>① 无缝循环</b>（loop）<b>② 切换动画时长 600 毫秒</b>（speed）<b>③ 圆点分页器且可点击跳转</b>（pagination，别漏 el）<b>④ 两侧箭头可切换</b>（navigation）。</p>
-      <span class="wy-star">⭐ 验证标准：点圆点能跳转、点箭头能翻页、最后一张继续往后翻会回到第一张</span>
-    </div>
+    <p class="wy-txt">无缝循环 + 600ms 动画 + 圆点可点击 + 箭头切换。</p>
     <div class="wy-demo">
       <span class="wy-demo-tag">🎛️ 演示二 · 圆点可点 + 箭头可切</span>
       <div class="wy-swiper">
@@ -152,6 +157,7 @@
             <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>让中国人的大飞机梦照进现实</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>坐底万米 · 深海探测进入"中国时代"</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>南仁东先生 22 年铸就的观天巨目</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>323.6 米 · 24 层楼高的海上移动城市</p></div></div>
           </div>
           <div class="swiper-pagination" id="wyPag2"></div>
           <div class="swiper-button-prev" id="wyPrev2"></div>
@@ -167,14 +173,9 @@
       <span class="wy-no">3</span>
       <h2>让它自己翻页<small>autoplay 自动播放 + loop 无缝续播</small></h2>
     </div>
-    <p class="wy-txt">网页 Banner 最常见的形态：<b>自己会翻页</b>。<code>autoplay.delay</code> 控制每张停留的毫秒数，<code>disableOnInteraction: false</code> 表示用户手动滑动之后自动播放<b>不停止</b>。</p>
-    <div class="wy-req">
-      <h3>✍️ 任务 3 要求</h3>
-      <p>初始化 <code>#wySw3</code>，实现：<b>① 循环播放</b> <b>② 每 2.6 秒自动翻页</b> <b>③ 用户拖动之后自动播放继续</b> <b>④ 保留底部圆点分页器（#wyPag3）</b>。</p>
-      <span class="wy-star">⭐ 验证标准：什么都不做它会自己翻；拖一下松手后，它还能接着自动翻</span>
-    </div>
+    <p class="wy-txt">每 2.6 秒自动翻页，用户拖动后自动播放不停止。</p>
     <div class="wy-demo">
-      <span class="wy-demo-tag">🎛️ 演示三 · 每 2.6 秒自动翻页（救活后什么都不用做，看着就行）</span>
+      <span class="wy-demo-tag">🎛️ 演示三 · 每 2.6 秒自动翻页（什么都不用做，看着就行）</span>
       <div class="wy-swiper">
         <div class="swiper" id="wySw3">
           <div class="swiper-wrapper">
@@ -183,6 +184,7 @@
             <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>蓝天之上 · 大国担当</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>万米深潜 · 无畏探索</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>仰望星空 · 脚踏实地</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>海上丝绸之路 · 移动的中国名片</p></div></div>
           </div>
           <div class="swiper-pagination" id="wyPag3"></div>
         </div>
@@ -194,33 +196,35 @@
   <div class="wy-sec">
     <div class="wy-sec-head">
       <span class="wy-no">4</span>
-      <h2>六种效果随心换<small>effect 参数 + 进阶：按钮实时切换</small></h2>
+      <h2>七种效果随心换<small>effect 参数 + creative 电影墙 + keyboard 键盘控制</small></h2>
     </div>
-    <p class="wy-txt">改一个 <code>effect</code> 参数，轮播立刻换一种"性格"：slide / fade / cube / coverflow / flip / cards。上面的 6 个按钮已经绑好了点击事件（读取 <code>btn.dataset.fx</code>），JS 还需要你补两段。</p>
+    <p class="wy-txt">改一个 <code>effect</code> 参数，轮播立刻换一种"性格"：slide / fade / cube / coverflow / flip / cards，以及课堂没讲的第 7 种 <code>creative</code> 自定义变换。本演示还支持<b>键盘 ← → 方向键翻页</b>（任务三超纲能力）。</p>
     <div class="wy-req">
-      <h3>✍️ 任务 4 要求</h3>
-      <p><b>基础分</b>：初始化 <code>#wySw4</code>，实现循环 + 自动播放（3.2 秒）+ 圆点分页器（#wyPag4），初始效果为 <code>'slide'</code>，动画时长 800 毫秒。</p>
-      <p><b>进阶分</b>：补全按钮点击事件中的 TODO——实现点击按钮<b>切换效果</b>。提示：Swiper 动态换 effect 不能只改参数，需要<b>先销毁旧实例再重建</b>（destroy + new）。</p>
-      <span class="wy-star">⭐ 验证标准：基础分——轮播自动翻页；进阶分——点 cube 按钮变 3D 立方体、点 fade 变淡入淡出</span>
+      <h3>✍️ 任务 4 要求（基础 + 加分）</h3>
+      <p><b>基础</b>：循环 + 自动播放（3.2 秒、手动后不停止）+ 圆点可点击（#wyPag4）+ 初始效果 <code>'cube'</code> + 动画 800 毫秒。</p>
+      <p><b>进阶</b>：点按钮销毁旧实例再重建，实时切换效果；第 7 个按钮为自学的 <code>creative</code> 电影墙。</p>
+      <span class="wy-star">⭐ 验证：初始即为 3D 立方体；点「creative 电影墙」两侧卡片缩小带角度；按键盘 ← → 可翻页</span>
     </div>
     <div class="wy-fx">
-      <button class="wy-on" data-fx="slide">slide 平推（默认·稳重）</button>
+      <button data-fx="slide">slide 平推（稳重）</button>
       <button data-fx="fade">fade 淡入淡出（优雅）</button>
-      <button data-fx="cube">cube 3D 立方体（炫酷）</button>
+      <button class="wy-on" data-fx="cube">cube 3D 立方体（默认·炫酷）</button>
       <button data-fx="coverflow">coverflow 画廊堆叠（沉浸）</button>
       <button data-fx="flip">flip 翻页（复古）</button>
       <button data-fx="cards">cards 卡片（俏皮）</button>
+      <button data-fx="creative">creative 电影墙（任务二·自学）</button>
     </div>
     <div class="wy-demo">
-      <span class="wy-demo-tag">🎛️ 演示四 · 效果实验台（点按钮切换 effect）</span>
+      <span class="wy-demo-tag">🎛️ 演示四 · 效果实验台（点按钮切换 effect，也试试键盘 ← →）</span>
       <div class="wy-swiper">
         <div class="swiper" id="wySw4">
           <div class="swiper-wrapper">
-            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="wy-cap"><h3>天宫空间站</h3><p>试试上面的效果按钮</p></div></div>
-            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>同一组照片，六种讲述方式</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="wy-cap"><h3>天宫空间站</h3><p>试试上面的效果按钮和键盘方向键</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>同一组照片，七种讲述方式</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>企业官网爱用 fade</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>游戏网站爱用 cube</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>相册页面爱用 coverflow</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>任务三新增 · 第六件展品</p></div></div>
           </div>
           <div class="swiper-pagination" id="wyPag4"></div>
         </div>
@@ -228,54 +232,107 @@
     </div>
   </div>
 
+  <!-- AI 提示词与答辩记录（提交物访问入口） -->
+  <div class="wy-sec" id="wyAiLog">
+    <div class="wy-sec-head">
+      <span class="wy-no">✎</span>
+      <h2>AI 提示词与答辩记录<small>任务一 / 二 / 三 提交物访问入口</small></h2>
+    </div>
+
+    <details class="wy-log" open>
+      <summary>任务一 · 提示词工程师（2 轮迭代 + 验证结论）</summary>
+      <h4>第 1 轮提示词（有遗漏）</h4>
+      <pre>帮我写 Swiper 11 的初始化代码：选择器 #wySw4，要无缝循环，每 3.2 秒自动翻页，
+用户手动拖动后自动播放不能停，底部分页器用 #wyPag4。</pre>
+      <h4>AI 第 1 轮回答的问题</h4>
+      <p>① pagination 没写 <code>clickable: true</code>——圆点渲染出来了但点不动（clickable 默认 false）；② 我的提示词里压根没提初始效果，AI 默认用了 slide，而任务要求初始为 <code>cube</code>。<b>根因：提示词只说了 3 条需求，漏了"圆点可点击"和"初始效果 cube"。</b></p>
+      <h4>第 2 轮提示词（补全 4 条硬需求，一次命中）</h4>
+      <pre>请生成 new Swiper('#wySw4', {...}) 完整配置，必须同时满足：
+① loop: true 无缝循环；
+② autoplay：delay 3200 且 disableOnInteraction: false（手动拖动后自动播放不停止）；
+③ pagination：el 为 '#wyPag4' 且 clickable: true（圆点可点击跳转）；
+④ effect: 'cube' 初始效果为 3D 立方体，speed: 800 毫秒。
+只输出 JS 代码。</pre>
+      <h4>验证结论（粘进页面逐条自测）</h4>
+      <p class="wy-ok">✔ 初始即为 cube 立方体；✔ 约 3.2 秒自动翻页；✔ 拖到一半松手后继续自动翻；✔ 点第 3 个圆点直接跳到第 3 张；✔ 最后一张再翻回第一张（无缝循环）。四项需求全部通过。</p>
+      <h4>答辩备忘</h4>
+      <p>第一版漏掉的是「圆点可点击」和「初始 cube」；第二轮我把 4 条需求改成编号清单逐条列出，AI 就无法"装没看见"了。</p>
+    </details>
+
+    <details class="wy-log">
+      <summary>任务二 · creative 电影墙（自学第 7 种效果 + prev / next 说明）</summary>
+      <h4>学习路径</h4>
+      <p>打开官方示例 <code>swiper/demo/257-effect-creative.html</code>，让 AI 逐行解释 <code>creativeEffect</code> 的写法后仿写。本页配置：</p>
+      <pre>creativeEffect: {
+  prev: { translate: ['-100%', 0, -400], rotate: [0, 0, -12], scale: 0.75, opacity: 0.5 },
+  next: { translate: ['100%',  0, -400], rotate: [0, 0,  12], scale: 0.75, opacity: 0.5 },
+}</pre>
+      <h4>prev / next 的 transform 各控制什么（自己的话）</h4>
+      <p><code>prev</code> 描述「已经翻过去的那张（左侧离场）」要变成什么样：<b>缩小到 0.75、向左移出自身一个宽度、绕 z 轴转 -12°</b>；<code>next</code> 描述「还没轮到的下一张（右侧候场）」在进场前处于什么状态：缩小、右移、转 +12°。切换时当前张从正常态过渡到 prev 态，下一张从 next 态过渡到正常态——两侧小卡片斜着排开，就像电影选片墙。</p>
+      <h4>答辩备忘</h4>
+      <p>translate 里的百分号是<b>相对 slide 自身的宽/高</b>（'-100%' 就是向左移出一张幻灯片自己的宽度），不是相对父容器；想让卡片转 20° 就把 rotate 的 -12 / 12 改成 -20 / 20。</p>
+    </details>
+
+    <details class="wy-log">
+      <summary>任务三 · 综合创作（爱达·魔都号 + keyboard 键盘控制）</summary>
+      <h4>关键对话 ①：第六件展品</h4>
+      <pre>我：为轮播加第六件展品「爱达·魔都号」（首艘国产大型邮轮，2024 年 1 月首航），
+图片用 AI 生成 16:9 横版，slide 结构与现有完全一致（img + wy-cap 标题/说明）。</pre>
+      <p class="wy-ok">✔ 生成 swiper-imgs/aidamodu_1.jpg，4 个轮播各补 1 张 slide，结构完整。</p>
+      <h4>关键对话 ②：超纲能力 keyboard</h4>
+      <pre>我：挑一个课堂没讲过的 Swiper 能力加到演示四，我选 keyboard 键盘控制。</pre>
+      <p>AI 第一次给的是 <code>keyboard: { enabled: true }</code> 且 4 个轮播全开——按一下方向键<b>4 个轮播一起动</b>；我改为只挂在 #wySw4，并加 <code>onlyInViewport: true</code>：只有它出现在视口内才响应键盘，避免滚动页面时误触。</p>
+      <h4>答辩四连问备忘</h4>
+      <p>· 代码含义：keyboard 模块把 ← → 映射到 slidePrev / slideNext；<br>
+      · AI 错在哪：少了 onlyInViewport，且不该给全部轮播开键盘；<br>
+      · 新参数作用：onlyInViewport 限定"轮播在视口内才响应"；<br>
+      · delay 演示：把 3200 改成 1000，预期每张只停 1 秒、翻页明显变快。</p>
+    </details>
+  </div>
+
   <div class="wy-back"><a href="index.html">← 返回课堂实践中心</a>　<a href="swiper-lesson.html">查看教师讲解版 →</a></div>
 
-  <footer>Swiper 课堂操作任务 · 大国重器光影展（学生版） · 高级网页设计 · 2026-2027-1</footer>
+  <footer>Swiper 课堂操作任务 · 大国重器光影展（学生版 · 王烨） · 高级网页设计 · 2026-2027-1</footer>
 </div>
 
 <script>
   // ══════════════════════════════════════════════════════════
-  //  ✍️ 学生作答区：把 4 个轮播全部救活（参考各演示台上方的绿色任务卡）
+  //  ✍️ 学生作答区：4 个轮播 + 任务一/二/三加分项（作者：王烨）
   // ══════════════════════════════════════════════════════════
 
   // ── 任务 1：初始化 #wySw1，让它至少可以拖动 ──
-  // TODO: 在这里写你的代码
   var wySw1 = new Swiper("#wySw1", {});
 
   // ── 任务 2：初始化 #wySw2，循环 + 600ms + 圆点可点 + 箭头切换 ──
-  // TODO: 在这里写你的代码
-var wySw2 = new Swiper("#wySw2", {
-      slidesPerView: 1,
-      loop: true,
-      speed: 600,
-      pagination: {
-        el: "#wyPag2",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: "#wyNext2",
-        prevEl: "#wyPrev2",
-      },
-    });
+  var wySw2 = new Swiper("#wySw2", {
+    slidesPerView: 1,
+    loop: true,
+    speed: 600,
+    pagination: {
+      el: "#wyPag2",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: "#wyNext2",
+      prevEl: "#wyPrev2",
+    },
+  });
 
   // ── 任务 3：初始化 #wySw3，循环 + 2.6 秒自动翻页 + 拖动后不停 + 圆点 ──
-  // TODO: 在这里写你的代码
-var wySw3 = new Swiper("#wySw3", {
-      loop: true,
-      autoplay: {
-        delay: 2600,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: "#wyPag3",
-        clickable: true,
-      },
- });
+  var wySw3 = new Swiper("#wySw3", {
+    loop: true,
+    autoplay: {
+      delay: 2600,
+      disableOnInteraction: false,
+    },
+    pagination: {
+      el: "#wyPag3",
+      clickable: true,
+    },
+  });
 
-  // ── 任务 4：初始化 #wySw4，循环 + 3.2 秒自动播放 + 圆点 + 初始 effect ──
-  // TODO: 在这里写你的代码
-
-  // ── 任务 4 进阶：把配置封装成函数，便于切换效果时用同一套参数重建 ──
+  // ── 任务 4（任务一迭代产物 + 任务二 creative + 任务三 keyboard）──
+  // 配置即任务一第 2 轮提示词生成的结果：loop / 3.2s 自动且手动不停 / 圆点可点 / 初始 cube / 800ms
   function wyBuildSw4(wyEffect, wySlide) {
     return new Swiper("#wySw4", {
       loop: true,
@@ -290,30 +347,34 @@ var wySw3 = new Swiper("#wySw3", {
         el: "#wyPag4",
         clickable: true,
       },
+      // 任务三：keyboard 键盘控制（课堂未讲；onlyInViewport 避免多轮播联动与误触）
+      keyboard: {
+        enabled: true,
+        onlyInViewport: true,
+      },
+      // 任务二：creative 电影墙（仅 effect 为 creative 时生效）
+      creativeEffect: {
+        prev: { translate: ["-100%", 0, -400], rotate: [0, 0, -12], scale: 0.75, opacity: 0.5 },
+        next: { translate: ["100%", 0, -400], rotate: [0, 0, 12], scale: 0.75, opacity: 0.5 },
+      },
     });
   }
 
-  var wySw4 = wyBuildSw4("slide", 0);
+  // 任务一要求：初始效果为 cube
+  var wySw4 = wyBuildSw4("cube", 0);
 
-  // ── 任务 4 进阶：补全按钮点击事件，实现六种效果实时切换 ──
-  // 提示 1：动态换 effect 只改参数是无效的，必须销毁旧实例再重建（destroy + new）
-  // 提示 2：按钮上已有 data-fx 属性，用 btn.dataset.fx 读取要切换的效果名
+  // ── 任务 4 进阶：按钮点击销毁旧实例 + 用新 effect 重建，实时切换 ──
   document.querySelectorAll('.wy-fx button').forEach(function(wyBtn){
     wyBtn.addEventListener('click', function(){
       var wyFx = wyBtn.dataset.fx;
-      // 记录当前停留的图片，重建后仍从这一张开始
       var wyCurIndex = wySw4.realIndex;
 
-      // TODO 1：先给当前按钮加 wy-on 类、其余按钮去掉 wy-on（高亮当前按钮）
       document.querySelectorAll('.wy-fx button').forEach(function(wyOther){
         wyOther.classList.remove('wy-on');
       });
       wyBtn.classList.add('wy-on');
 
-      // TODO 2：销毁旧的 wySw4 实例
       wySw4.destroy(true, true);
-
-      // TODO 3：用新 effect 重建实例（把其它配置原样保留）
       wySw4 = wyBuildSw4(wyFx, wyCurIndex);
     });
   });
