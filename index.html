@@ -85,8 +85,6 @@
   .wy-fx button.wy-on{background:linear-gradient(135deg,#0f2b5b,#1d5bbf);color:#fff;border-color:transparent}
 
   /* 任务一 · 提示词两轮对照（效果 + 代码并排） */
-  .wy-prompt-link{display:inline-block;margin-top:16px;text-decoration:none;font-size:13.5px;font-weight:bold;color:#0f2b5b;background:#e8f0ff;border:1px solid #c7d8f8;border-radius:999px;padding:9px 22px;transition:all .2s}
-  .wy-prompt-link:hover{background:#dbe7ff;transform:translateY(-2px)}
   .wy-cmp{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:16px 0 6px}
   .wy-cmp-card{border:1px solid #e5e7eb;border-radius:14px;padding:16px 18px;background:#fff}
   .wy-cmp-card.wy-bad{border-color:#fca5a5;box-shadow:0 6px 16px rgba(185,28,28,.08)}
@@ -138,7 +136,7 @@
 
   <div class="wy-rule">
     <b>📋 加分任务完成说明：</b><br>
-    ① 任务一：4 条硬需求（无缝循环 / 3.2 秒自动翻页且手动后不停止 / 圆点可点击 / 初始 cube）经 <b>2 轮提示词迭代</b> 生成，记录在页面底部；<br>
+    ① 任务一：4 条硬需求（无缝循环 / 3.2 秒自动翻页且手动后不停止 / 圆点可点击 / 初始 cube）经 <b>2 轮提示词迭代</b> 生成，两轮「效果 + 代码」对照就放在<b>任务一区块内</b>；<br>
     ② 任务二：演示四新增第 7 个按钮 <b>「creative 电影墙」</b>，上一张缩小左移带角度、下一张放大右移进场；<br>
     ③ 任务三：6 件展品齐（新增<b>爱达·魔都号</b>，AI 生成 16:9 图），演示四支持 <b>keyboard 键盘方向键</b> 翻页（课堂未讲）。
   </div>
@@ -165,7 +163,85 @@
         </div>
       </div>
     </div>
-    <a class="wy-prompt-link" href="#wy-prompt">📋 任务一 · 提示词两轮对照（效果 + 代码）→</a>
+
+    <!-- wy-prompt：任务一提示词两轮对照（效果 + 代码同屏，就在任务一里） -->
+    <div id="wy-prompt" style="margin-top:28px;padding-top:20px;border-top:1px dashed #dbe4ff">
+      <div class="wy-sec-head" style="margin-bottom:10px">
+        <h2 style="font-size:17px">提示词两轮对照<small>圆点只能看 → 圆点能点：效果与代码同屏</small></h2>
+      </div>
+      <p class="wy-txt">同样一句"加个圆点分页器"，第 1 轮 AI 只画出了圆点，第 2 轮补上 <code>clickable: true</code> 才真正能点。<b>下面的两个轮播都是真的能拖的</b>，可以直接点圆点对比：左边点了不会跳，右边点了立即跳。</p>
+
+      <div class="wy-cmp">
+        <div class="wy-cmp-card wy-bad">
+          <div class="wy-cmp-top">
+            <span class="wy-cmp-round">第 1 轮</span>
+            <span class="wy-cmp-tag wy-tag-bad">漏了需求</span>
+          </div>
+          <h4>圆点只能看，不能点</h4>
+          <p class="wy-cmp-desc">提示词只写了"加个圆点分页器"。AI 理解为"把圆点画出来"，于是只给了 <code>el</code>，没给 <code>clickable</code>（默认 false）。</p>
+          <div class="wy-mini">
+            <div class="swiper" id="wySwBad">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>第 1 轮 · 圆点点击无效</p></div></div>
+                <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>第 1 轮 · 圆点点击无效</p></div></div>
+                <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>第 1 轮 · 圆点点击无效</p></div></div>
+              </div>
+              <div class="swiper-pagination" id="wyPagBad"></div>
+            </div>
+          </div>
+          <div class="wy-verify">点第 3 个圆点 → 当前索引 <b id="wyIdxBad">0</b> · <span id="wyMsgBad">没有跳转</span></div>
+          <pre class="wy-code">pagination: {
+  el: '#wyPagBad'
+}</pre>
+        </div>
+
+        <div class="wy-cmp-card wy-good">
+          <div class="wy-cmp-top">
+            <span class="wy-cmp-round">第 2 轮</span>
+            <span class="wy-cmp-tag wy-tag-good">补充需求</span>
+          </div>
+          <h4>圆点是遥控器，不是装饰</h4>
+          <p class="wy-cmp-desc">第 2 轮把需求写成"圆点必须能点击直接跳转，不是只能看"。同一个 AI，立刻补上了 <code>clickable: true</code>。</p>
+          <div class="wy-mini">
+            <div class="swiper" id="wySwGood">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="wy-cap"><h3>天宫空间站</h3><p>第 2 轮 · 圆点可点击跳转</p></div></div>
+                <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>第 2 轮 · 圆点可点击跳转</p></div></div>
+                <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>第 2 轮 · 圆点可点击跳转</p></div></div>
+              </div>
+              <div class="swiper-pagination" id="wyPagGood"></div>
+            </div>
+          </div>
+          <div class="wy-verify">点第 3 个圆点 → 当前索引 <b id="wyIdxGood">0</b> · <span id="wyMsgGood">试试点圆点</span></div>
+          <pre class="wy-code">pagination: {
+  el: '#wyPagGood',
+  clickable: true
+}</pre>
+        </div>
+      </div>
+
+      <p class="wy-txt" style="margin-top:16px"><b>要点：</b><code>el</code> 只负责"把圆点画在哪里"，<code>clickable: true</code> 才让圆点绑定点击跳转；不写它，圆点就只是装饰。</p>
+
+      <details class="wy-log" open>
+        <summary>任务一 · 提示词工程师（2 轮原文 + 验证结论）</summary>
+        <h4>第 1 轮提示词（有遗漏）</h4>
+        <pre>帮我写 Swiper 11 的初始化代码：选择器 #wySw4，要无缝循环，每 3.2 秒自动翻页，
+用户手动拖动后自动播放不能停，底部分页器用 #wyPag4。</pre>
+        <h4>AI 第 1 轮回答的问题</h4>
+        <p>① pagination 没写 <code>clickable: true</code>——圆点渲染出来了但点不动（clickable 默认 false）；② 我的提示词里压根没提初始效果，AI 默认用了 slide，而任务要求初始为 <code>cube</code>。<b>根因：提示词只说了 3 条需求，漏了"圆点可点击"和"初始效果 cube"。</b></p>
+        <h4>第 2 轮提示词（补全 4 条硬需求，一次命中）</h4>
+        <pre>请生成 new Swiper('#wySw4', {...}) 完整配置，必须同时满足：
+① loop: true 无缝循环；
+② autoplay：delay 3200 且 disableOnInteraction: false（手动拖动后自动播放不停止）；
+③ pagination：el 为 '#wyPag4' 且 clickable: true（圆点可点击跳转）；
+④ effect: 'cube' 初始效果为 3D 立方体，speed: 800 毫秒。
+只输出 JS 代码。</pre>
+        <h4>验证结论（粘进页面逐条自测）</h4>
+        <p class="wy-ok">✔ 初始即为 cube 立方体；✔ 约 3.2 秒自动翻页；✔ 拖到一半松手后继续自动翻；✔ 点第 3 个圆点直接跳到第 3 张；✔ 最后一张再翻回第一张（无缝循环）。四项需求全部通过。</p>
+        <h4>答辩备忘</h4>
+        <p>第一版漏掉的是「圆点可点击」和「初始 cube」；第二轮我把 4 条需求改成编号清单逐条列出，AI 就无法"装没看见"了。</p>
+      </details>
+    </div>
   </div>
 
   <!-- 任务 2 -->
@@ -260,84 +336,12 @@
     </div>
   </div>
 
-  <!-- wy-prompt：任务一提示词两轮对照（效果 + 代码同屏） -->
-  <div class="wy-sec" id="wy-prompt">
+  <!-- 任务二 / 三 · AI 答辩记录 -->
+  <div class="wy-sec" id="wy-log">
     <div class="wy-sec-head">
       <span class="wy-no">✎</span>
-      <h2>任务一 · 提示词两轮对照<small>圆点只能看 → 圆点能点：效果与代码同屏</small></h2>
+      <h2>任务二 / 三 · AI 答辩记录<small>creative 电影墙 + 爱达·魔都号 + keyboard</small></h2>
     </div>
-    <p class="wy-txt">同样一句"加个圆点分页器"，第 1 轮 AI 只画出了圆点，第 2 轮补上 <code>clickable: true</code> 才真正能点。<b>下面的两个轮播都是真的能拖的</b>，可以直接点圆点对比：左边点了不会跳，右边点了立即跳。</p>
-
-    <div class="wy-cmp">
-      <div class="wy-cmp-card wy-bad">
-        <div class="wy-cmp-top">
-          <span class="wy-cmp-round">第 1 轮</span>
-          <span class="wy-cmp-tag wy-tag-bad">漏了需求</span>
-        </div>
-        <h4>圆点只能看，不能点</h4>
-        <p class="wy-cmp-desc">提示词只写了"加个圆点分页器"。AI 理解为"把圆点画出来"，于是只给了 <code>el</code>，没给 <code>clickable</code>（默认 false）。</p>
-        <div class="wy-mini">
-          <div class="swiper" id="wySwBad">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>第 1 轮 · 圆点点击无效</p></div></div>
-              <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>第 1 轮 · 圆点点击无效</p></div></div>
-              <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>第 1 轮 · 圆点点击无效</p></div></div>
-            </div>
-            <div class="swiper-pagination" id="wyPagBad"></div>
-          </div>
-        </div>
-        <div class="wy-verify">点第 3 个圆点 → 当前索引 <b id="wyIdxBad">0</b> · <span id="wyMsgBad">没有跳转</span></div>
-        <pre class="wy-code">pagination: {
-  el: '#wyPagBad'
-}</pre>
-      </div>
-
-      <div class="wy-cmp-card wy-good">
-        <div class="wy-cmp-top">
-          <span class="wy-cmp-round">第 2 轮</span>
-          <span class="wy-cmp-tag wy-tag-good">补充需求</span>
-        </div>
-        <h4>圆点是遥控器，不是装饰</h4>
-        <p class="wy-cmp-desc">第 2 轮把需求写成"圆点必须能点击直接跳转，不是只能看"。同一个 AI，立刻补上了 <code>clickable: true</code>。</p>
-        <div class="wy-mini">
-          <div class="swiper" id="wySwGood">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="wy-cap"><h3>天宫空间站</h3><p>第 2 轮 · 圆点可点击跳转</p></div></div>
-              <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>第 2 轮 · 圆点可点击跳转</p></div></div>
-              <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>第 2 轮 · 圆点可点击跳转</p></div></div>
-            </div>
-            <div class="swiper-pagination" id="wyPagGood"></div>
-          </div>
-        </div>
-        <div class="wy-verify">点第 3 个圆点 → 当前索引 <b id="wyIdxGood">0</b> · <span id="wyMsgGood">试试点圆点</span></div>
-        <pre class="wy-code">pagination: {
-  el: '#wyPagGood',
-  clickable: true
-}</pre>
-      </div>
-    </div>
-
-    <p class="wy-txt" style="margin-top:16px"><b>要点：</b><code>el</code> 只负责"把圆点画在哪里"，<code>clickable: true</code> 才让圆点绑定点击跳转；不写它，圆点就只是装饰。</p>
-
-    <details class="wy-log" open>
-      <summary>任务一 · 提示词工程师（2 轮原文 + 验证结论）</summary>
-      <h4>第 1 轮提示词（有遗漏）</h4>
-      <pre>帮我写 Swiper 11 的初始化代码：选择器 #wySw4，要无缝循环，每 3.2 秒自动翻页，
-用户手动拖动后自动播放不能停，底部分页器用 #wyPag4。</pre>
-      <h4>AI 第 1 轮回答的问题</h4>
-      <p>① pagination 没写 <code>clickable: true</code>——圆点渲染出来了但点不动（clickable 默认 false）；② 我的提示词里压根没提初始效果，AI 默认用了 slide，而任务要求初始为 <code>cube</code>。<b>根因：提示词只说了 3 条需求，漏了"圆点可点击"和"初始效果 cube"。</b></p>
-      <h4>第 2 轮提示词（补全 4 条硬需求，一次命中）</h4>
-      <pre>请生成 new Swiper('#wySw4', {...}) 完整配置，必须同时满足：
-① loop: true 无缝循环；
-② autoplay：delay 3200 且 disableOnInteraction: false（手动拖动后自动播放不停止）；
-③ pagination：el 为 '#wyPag4' 且 clickable: true（圆点可点击跳转）；
-④ effect: 'cube' 初始效果为 3D 立方体，speed: 800 毫秒。
-只输出 JS 代码。</pre>
-      <h4>验证结论（粘进页面逐条自测）</h4>
-      <p class="wy-ok">✔ 初始即为 cube 立方体；✔ 约 3.2 秒自动翻页；✔ 拖到一半松手后继续自动翻；✔ 点第 3 个圆点直接跳到第 3 张；✔ 最后一张再翻回第一张（无缝循环）。四项需求全部通过。</p>
-      <h4>答辩备忘</h4>
-      <p>第一版漏掉的是「圆点可点击」和「初始 cube」；第二轮我把 4 条需求改成编号清单逐条列出，AI 就无法"装没看见"了。</p>
-    </details>
 
     <details class="wy-log">
       <summary>任务二 · creative 电影墙（自学第 7 种效果 + prev / next 说明）</summary>
