@@ -81,6 +81,10 @@
   .wy-swiper .wy-thumb-nav .swiper-slide img{width:100%;height:100%;object-fit:cover;display:block}
   .wy-swiper .wy-thumb-nav .swiper-slide-thumb-active{opacity:1;border-color:#e8890c;box-shadow:0 6px 14px rgba(232,137,12,.35)}
 
+  /* 任务四第 8 种：thumbs 缩略图联动。平时隐藏缩略图条，切到该效果才显示 */
+  #wySw4ThumbNav{display:none}
+  .wy-swiper.wy-thumb-mode #wySw4ThumbNav{display:block}
+
   /* 效果切换按钮 */
   .wy-fx{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 2px}
   .wy-fx button{
@@ -137,7 +141,7 @@
     <span class="wy-badge">高 职 · 高 级 网 页 设 计 · 课 堂 操 作 任 务</span>
     <h1>Swiper 轮播组件 · <b>大国重器光影展（学生版 · 王烨）</b></h1>
     <p>已完成 4 个基础轮播 + 三个加分任务：<b>任务一</b> 提示词迭代生成 cube 配置、<b>任务二</b> 自学 creative 第 7 种效果「电影墙」、<b>任务三</b> 第六件展品「爱达·魔都号」+ keyboard 键盘控制（方向键 ← → 可翻页）。</p>
-    <div class="wy-goals"><i>任务 1 · 最小轮播</i><i>任务 2 · 圆点+箭头</i><i>任务 3 · 自动翻页</i><i>任务 4 · 七种效果随心换</i><a href="#wy-prompt">📋 任务一提示词两轮对照 ↓</a></div>
+    <div class="wy-goals"><i>任务 1 · 最小轮播</i><i>任务 2 · 圆点+箭头</i><i>任务 3 · 自动翻页</i><i>任务 4 · 八种效果随心换</i><a href="#wy-prompt">📋 任务一提示词两轮对照 ↓</a></div>
   </div>
 
   <div class="wy-rule">
@@ -337,14 +341,14 @@
   <div class="wy-sec">
     <div class="wy-sec-head">
       <span class="wy-no">4</span>
-      <h2>七种效果随心换<small>effect 参数 + creative 电影墙 + keyboard 键盘控制</small></h2>
+      <h2>八种效果随心换<small>effect 参数 + creative 电影墙 + thumbs 缩略图 + keyboard 键盘控制</small></h2>
     </div>
-    <p class="wy-txt">改一个 <code>effect</code> 参数，轮播立刻换一种"性格"：slide / fade / cube / coverflow / flip / cards，以及课堂没讲的第 7 种 <code>creative</code> 自定义变换。本演示还支持<b>键盘 ← → 方向键翻页</b>（任务三超纲能力）。</p>
+    <p class="wy-txt">改一个 <code>effect</code> 参数，轮播立刻换一种"性格"：slide / fade / cube / coverflow / flip / cards，加上课堂没讲的第 7 种 <code>creative</code> 自定义变换，以及第 8 种 <code>thumbs</code> 缩略图联动（就是任务三新增的那个效果）。本演示还支持<b>键盘 ← → 方向键翻页</b>（任务三超纲能力）。</p>
     <div class="wy-req">
       <h3>✍️ 任务 4 要求（基础 + 加分）</h3>
       <p><b>基础</b>：循环 + 自动播放（3.2 秒、手动后不停止）+ 圆点可点击（#wyPag4）+ 初始效果 <code>'cube'</code> + 动画 800 毫秒。</p>
-      <p><b>进阶</b>：点按钮销毁旧实例再重建，实时切换效果；第 7 个按钮为自学的 <code>creative</code> 电影墙。</p>
-      <span class="wy-star">⭐ 验证：初始即为 3D 立方体；点「creative 电影墙」两侧卡片缩小带角度；按键盘 ← → 可翻页</span>
+      <p><b>进阶</b>：点按钮销毁旧实例再重建，实时切换效果；第 7 个按钮为自学的 <code>creative</code> 电影墙，第 8 个按钮为任务三新增的 <code>thumbs</code> 缩略图联动。</p>
+      <span class="wy-star">⭐ 验证：初始即为 3D 立方体；点「creative 电影墙」两侧卡片缩小带角度；点「thumbs 缩略图联动」下方出现缩略图条且可点击切换；按键盘 ← → 可翻页</span>
     </div>
     <div class="wy-fx">
       <button data-fx="slide">slide 平推（稳重）</button>
@@ -354,6 +358,7 @@
       <button data-fx="flip">flip 翻页（复古）</button>
       <button data-fx="cards">cards 卡片（俏皮）</button>
       <button data-fx="creative">creative 电影墙（任务二·自学）</button>
+      <button data-fx="thumbs">thumbs 缩略图联动（任务三·自学）</button>
     </div>
     <div class="wy-demo">
       <span class="wy-demo-tag">🎛️ 演示四 · 效果实验台（点按钮切换 effect，也试试键盘 ← →）</span>
@@ -361,13 +366,24 @@
         <div class="swiper" id="wySw4">
           <div class="swiper-wrapper">
             <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="wy-cap"><h3>天宫空间站</h3><p>试试上面的效果按钮和键盘方向键</p></div></div>
-            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>同一组照片，七种讲述方式</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>同一组照片，八种讲述方式</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>企业官网爱用 fade</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>游戏网站爱用 cube</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>相册页面爱用 coverflow</p></div></div>
             <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>任务三新增 · 第六件展品</p></div></div>
           </div>
           <div class="swiper-pagination" id="wyPag4"></div>
+        </div>
+        <!-- 第 8 种 thumbs 效果用的缩略图条，只在选中 thumbs 时显示 -->
+        <div class="swiper wy-thumb-nav" id="wySw4ThumbNav">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="天眼缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达魔都号缩略图"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -516,13 +532,43 @@
     },
   });
 
-  // ── 任务 4（任务一迭代产物 + 任务二 creative + 任务三 keyboard）──
+  // 第 8 种 thumbs 效果的缩略图实例，切换时创建 / 销毁
+  var wyThumb4 = null;
+
+  // ── 任务 4（任务一迭代产物 + 任务二 creative + 任务三 keyboard + 第 8 种 thumbs）──
   // 配置即任务一第 2 轮提示词生成的结果：loop / 3.2s 自动且手动不停 / 圆点可点 / 初始 cube / 800ms
   function wyBuildSw4(wyEffect, wySlide) {
-    return new Swiper("#wySw4", {
-      loop: true,
+    // 第 8 种 thumbs 不是 effect，而是"主图 + 缩略图联动"，需要额外的缩略图轮播实例
+    var wyIsThumbs = wyEffect === "thumbs";
+
+    // 先清掉上一次的缩略图实例，避免重复初始化同一个元素
+    if (wyThumb4) {
+      wyThumb4.destroy(true, true);
+      wyThumb4 = null;
+    }
+
+    // 先让缩略图条显示出来，Swiper 才量得到宽度；再初始化缩略图，最后建主轮播
+    var wyShell = document.getElementById("wySw4").parentElement;
+    wyShell.classList.toggle("wy-thumb-mode", wyIsThumbs);
+
+    if (wyIsThumbs) {
+      wyThumb4 = new Swiper("#wySw4ThumbNav", {
+        slidesPerView: 6,
+        spaceBetween: 8,
+        watchSlidesProgress: true,
+        breakpoints: {
+          0: { slidesPerView: 3 },
+          520: { slidesPerView: 4 },
+          760: { slidesPerView: 6 },
+        },
+      });
+    }
+
+    var wyOpts = {
+      // thumbs 与 loop 同时开启索引会错位，thumbs 模式下关闭 loop
+      loop: !wyIsThumbs,
       speed: 800,
-      effect: wyEffect,
+      effect: wyIsThumbs ? "slide" : wyEffect,
       initialSlide: wySlide || 0,
       autoplay: {
         delay: 3200,
@@ -542,7 +588,14 @@
         prev: { translate: ["-100%", 0, -400], rotate: [0, 0, -12], scale: 0.75, opacity: 0.5 },
         next: { translate: ["100%", 0, -400], rotate: [0, 0, 12], scale: 0.75, opacity: 0.5 },
       },
-    });
+    };
+
+    // 第 8 种：thumbs 缩略图联动（与任务三新增的演示同一套写法）
+    if (wyIsThumbs) {
+      wyOpts.thumbs = { swiper: wyThumb4 };
+    }
+
+    return new Swiper("#wySw4", wyOpts);
   }
 
   // 任务一要求：初始效果为 cube
