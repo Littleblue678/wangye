@@ -75,6 +75,12 @@
   }
   .wy-swiper .swiper-button-next:hover,.wy-swiper .swiper-button-prev:hover{background:#e8890c}
 
+  /* 任务三补充 · thumbs 缩略图导航 */
+  .wy-swiper .wy-thumb-nav{border-radius:10px;box-shadow:none;margin-top:12px}
+  .wy-swiper .wy-thumb-nav .swiper-slide{height:62px;border-radius:8px;overflow:hidden;cursor:pointer;opacity:.45;border:2px solid transparent;transition:opacity .25s,box-shadow .25s}
+  .wy-swiper .wy-thumb-nav .swiper-slide img{width:100%;height:100%;object-fit:cover;display:block}
+  .wy-swiper .wy-thumb-nav .swiper-slide-thumb-active{opacity:1;border-color:#e8890c;box-shadow:0 6px 14px rgba(232,137,12,.35)}
+
   /* 效果切换按钮 */
   .wy-fx{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 2px}
   .wy-fx button{
@@ -294,6 +300,37 @@
         </div>
       </div>
     </div>
+
+    <!-- 任务三补充：thumbs 缩略图联动（仿官方 314-thumbs-gallery） -->
+    <div class="wy-demo" style="margin-top:24px">
+      <span class="wy-demo-tag">🎛️ 演示三补充 · thumbs 缩略图联动（点下方小图切主图）</span>
+      <div class="wy-swiper">
+        <div class="swiper" id="wySwThumbMain">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫空间站"><div class="wy-cap"><h3>天宫空间站</h3><p>点下方缩略图，主图立即跟随切换</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号动车组"><div class="wy-cap"><h3>复兴号动车组</h3><p>缩略图当前张会亮起金色边框</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919大飞机"><div class="wy-cap"><h3>C919 大飞机</h3><p>左右箭头和圆点同样可用</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号"><div class="wy-cap"><h3>奋斗者号</h3><p>thumbs 让主次两个轮播索引同步</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="中国天眼"><div class="wy-cap"><h3>中国天眼 FAST</h3><p>缩略图可横向滑动查看更多</p></div></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达·魔都号"><div class="wy-cap"><h3>爱达·魔都号</h3><p>第六件展品同样支持联动</p></div></div>
+          </div>
+          <div class="swiper-pagination" id="wyPagThumb"></div>
+          <div class="swiper-button-prev" id="wyPrevThumb"></div>
+          <div class="swiper-button-next" id="wyNextThumb"></div>
+        </div>
+        <div class="swiper wy-thumb-nav" id="wySwThumbNav">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide"><img src="swiper-imgs/tiangong_1.jpg" alt="天宫缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fuxing_1.jpg" alt="复兴号缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/c919_1.jpg" alt="C919缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fendouzhe_1.jpg" alt="奋斗者号缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/fast_1.jpg" alt="天眼缩略图"></div>
+            <div class="swiper-slide"><img src="swiper-imgs/aidamodu_1.jpg" alt="爱达魔都号缩略图"></div>
+          </div>
+        </div>
+      </div>
+      <p class="wy-txt" style="margin-top:12px"><b>官方 demo 用法：</b>主轮播写 <code>thumbs: { swiper: 缩略图实例 }</code>；缩略图轮播配 <code>slidesPerView: 6</code> + <code>watchSlidesProgress: true</code>，这样主图切换时缩略图会自动加 <code>swiper-slide-thumb-active</code>；两者都<b>不开 loop</b>，索引才能一一对应。先创建缩略图实例，再创建主轮播。</p>
+    </div>
   </div>
 
   <!-- 任务 4 -->
@@ -448,6 +485,34 @@
     pagination: {
       el: "#wyPag3",
       clickable: true,
+    },
+  });
+
+  // ── 任务三补充：thumbs 缩略图联动（仿官方 314-thumbs-gallery）──
+  // 先建缩略图轮播，再建主轮播并用 thumbs 关联；两者都不开 loop，索引才一一对应
+  var wySwThumbNav = new Swiper("#wySwThumbNav", {
+    slidesPerView: 6,
+    spaceBetween: 8,
+    watchSlidesProgress: true,
+    breakpoints: {
+      0: { slidesPerView: 3 },
+      520: { slidesPerView: 4 },
+      760: { slidesPerView: 6 },
+    },
+  });
+
+  var wySwThumbMain = new Swiper("#wySwThumbMain", {
+    speed: 600,
+    thumbs: {
+      swiper: wySwThumbNav,
+    },
+    pagination: {
+      el: "#wyPagThumb",
+      clickable: true,
+    },
+    navigation: {
+      nextEl: "#wyNextThumb",
+      prevEl: "#wyPrevThumb",
     },
   });
 
