@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<!--
+  作者：王烨
+  建立时间：2026-11-12
+  使用模型：DeepSeek-V4.1-Flash
+  功能名称：古诗图文上图下文
+  功能简介：页面加载后请求 http://localhost:3004/api/poems，把 db/db.json 中 poems 的
+           pic（图片）、title（标题）、content（正文）渲染成"上图下文"的卡片列表。
+           图片经 /api/pic 代理加载，规避 gitee 防盗链。
+  命名规则：所有 CSS 类名、id、JS 变量均以 wy 开头。
+-->
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>古诗图文上图下文</title>
+  <style>
+    :root {
+      --wy-ink: #1d1712;
+      --wy-ink-soft: #4a3f34;
+      --wy-gold: #b08b4f;
+      --wy-gold-light: #d9bd8b;
+      --wy-paper: #f7f3ea;
+      --wy-card: #fffdf8;
+      --wy-line: rgba(176, 139, 79, .28);
+      --wy-serif: "Songti SC", "STSong", "SimSun", "Noto Serif SC", serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+      color: var(--wy-ink);
+      min-height: 100vh;
+      background-color: var(--wy-paper);
+      background-image:
+        radial-gradient(circle at 12% 8%, rgba(176, 139, 79, .10), transparent 42%),
+        radial-gradient(circle at 88% 0%, rgba(120, 90, 55, .09), transparent 38%),
+        radial-gradient(circle at 50% 120%, rgba(176, 139, 79, .07), transparent 55%);
+      background-attachment: fixed;
+    }
+
+    /* ══════════ 页头 ══════════ */
+    .wy-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 62px 24px 54px;
+      text-align: center;
+      color: #f4ece0;
+      background: linear-gradient(150deg, #211a14 0%, #33261a 48%, #1b1510 100%);
+    }
+
+    /* 顶部柔光 */
+    .wy-hero::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -180px;
+      width: 620px;
+      height: 420px;
+      transform: translateX(-50%);
+      background: radial-gradient(ellipse, rgba(217, 189, 139, .22), transparent 68%);
+      pointer-events: none;
+    }
+
+    .wy-hero-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .wy-hero-tag {
+      display: inline-block;
+      font-size: 12px;
+      letter-spacing: 5px;
+      color: var(--wy-gold-light);
+      border: 1px solid rgba(217, 189, 139, .45);
+      border-radius: 999px;
+      padding: 5px 18px 5px 22px;
+      margin-bottom: 22px;
+    }
+
+    .wy-hero h1 {
+      font-family: var(--wy-serif);
+      font-size: 38px;
+      font-weight: 600;
+      letter-spacing: 10px;
+      text-indent: 10px;
+      line-height: 1.5;
+      background: linear-gradient(180deg, #fdf7ea, #d9bd8b);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .wy-hero-line {
+      width: 64px;
+      height: 2px;
+      margin: 22px auto 18px;
+      background: linear-gradient(90deg, transparent, var(--wy-gold), transparent);
+    }
+
+    .wy-hero-sub {
+      font-size: 13.5px;
+      letter-spacing: 2px;
+      color: rgba(233, 220, 201, .72);
+      line-height: 2;
+    }
+
+    .wy-hero-count {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--wy-gold-light);
+    }
+
+    /* ══════════ 内容区 ══════════ */
+    .wy-main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 52px 26px 70px;
+    }
+
+    .wy-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 30px;
+    }
+
+    /* ══════════ 卡片：上图下文 ══════════ */
+    .wy-card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      background: var(--wy-card);
+      border: 1px solid rgba(176, 139, 79, .22);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow:
+        0 1px 2px rgba(60, 44, 28, .05),
+        0 10px 26px -10px rgba(60, 44, 28, .22);
+      transition: transform .35s cubic-bezier(.2, .7, .3, 1), box-shadow .35s;
+      animation: wyFadeUp .65s cubic-bezier(.2, .7, .3, 1) both;
+    }
+
+    .wy-card:hover {
+      transform: translateY(-8px);
+      box-shadow:
+        0 2px 4px rgba(60, 44, 28, .06),
+        0 24px 44px -14px rgba(60, 44, 28, .34);
+    }
+
+    /* 上图 */
+    .wy-cover {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: linear-gradient(135deg, #e8dfd0, #d8cbb6);
+    }
+
+    .wy-card-img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.02);
+      transition: opacity .7s ease, transform .8s cubic-bezier(.2, .7, .3, 1);
+    }
+
+    .wy-card-img.wy-loaded {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .wy-card:hover .wy-card-img {
+      transform: scale(1.07);
+    }
+
+    /* 图片底部渐隐，衔接正文 */
+    .wy-cover::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0 0;
+      height: 46%;
+      background: linear-gradient(transparent, rgba(28, 21, 15, .42));
+      pointer-events: none;
+    }
+
+    /* 序号印章 */
+    .wy-card-no {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 2;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--wy-serif);
+      font-size: 15px;
+      color: #fdf7ea;
+      background: rgba(28, 21, 15, .55);
+      border: 1px solid rgba(217, 189, 139, .6);
+      border-radius: 9px;
+      backdrop-filter: blur(4px);
+    }
+
+    /* 下文 */
+    .wy-card-body {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 24px 24px 26px;
+    }
+
+    .wy-card-title {
+      font-family: var(--wy-serif);
+      font-size: 21px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      color: var(--wy-ink);
+      line-height: 1.5;
+    }
+
+    .wy-card-divider {
+      width: 36px;
+      height: 2px;
+      border-radius: 2px;
+      background: linear-gradient(90deg, var(--wy-gold), rgba(176, 139, 79, .15));
+      transition: width .35s ease;
+    }
+
+    .wy-card:hover .wy-card-divider {
+      width: 62px;
+    }
+
+    .wy-card-content {
+      font-size: 14.5px;
+      line-height: 2.05;
+      letter-spacing: 1.2px;
+      color: var(--wy-ink-soft);
+    }
+
+    /* ══════════ 加载 / 错误状态 ══════════ */
+    .wy-state {
+      text-align: center;
+      padding: 90px 20px;
+      font-size: 15px;
+      letter-spacing: 1.5px;
+      color: #8a7c69;
+      line-height: 2;
+    }
+
+    .wy-spinner {
+      width: 34px;
+      height: 34px;
+      margin: 0 auto 18px;
+      border: 2px solid rgba(176, 139, 79, .25);
+      border-top-color: var(--wy-gold);
+      border-radius: 50%;
+      animation: wySpin .9s linear infinite;
+    }
+
+    .wy-state.wy-error {
+      color: #a8452f;
+    }
+
+    .wy-state code {
+      background: rgba(176, 139, 79, .14);
+      color: #7a5c37;
+      padding: 2px 8px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+      font-size: 13px;
+    }
+
+    .wy-hide { display: none; }
+
+    /* ══════════ 页脚 ══════════ */
+    .wy-footer {
+      text-align: center;
+      padding: 0 24px 46px;
+      font-size: 12.5px;
+      letter-spacing: 2px;
+      color: #a89a86;
+    }
+
+    .wy-footer::before {
+      content: "";
+      display: block;
+      width: 52px;
+      height: 1px;
+      margin: 0 auto 18px;
+      background: linear-gradient(90deg, transparent, var(--wy-line), transparent);
+    }
+
+    /* ══════════ 动画 ══════════ */
+    @keyframes wyFadeUp {
+      from { opacity: 0; transform: translateY(26px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes wySpin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ══════════ 响应式 ══════════ */
+    @media (max-width: 640px) {
+      .wy-hero { padding: 46px 20px 40px; }
+      .wy-hero h1 { font-size: 26px; letter-spacing: 5px; text-indent: 5px; }
+      .wy-hero-sub { font-size: 12.5px; letter-spacing: 1px; }
+      .wy-main { padding: 34px 18px 50px; }
+      .wy-list { gap: 22px; }
+      .wy-card-body { padding: 20px 20px 22px; }
+      .wy-card-title { font-size: 19px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="wy-hero">
+    <div class="wy-hero-inner">
+      <span class="wy-hero-tag">诗 词 图 文</span>
+      <h1>古诗图文上图下文</h1>
+      <div class="wy-hero-line"></div>
+      <p class="wy-hero-sub">一图一诗 · 图置于上，文承于下</p>
+      <span class="wy-hero-count" id="wyCount"></span>
+    </div>
+  </header>
+
+  <main class="wy-main">
+    <!-- 加载中 -->
+    <div class="wy-state" id="wyLoading">
+      <div class="wy-spinner"></div>
+      正在从本地服务器读取诗词数据…
+    </div>
+
+    <!-- 出错提示 -->
+    <div class="wy-state wy-error wy-hide" id="wyError">
+      数据读取失败。<br>
+      请先在 <code>db</code> 文件夹里执行 <code>node server.js</code> 启动 3004 端口服务，再刷新本页。
+    </div>
+
+    <!-- 卡片列表 -->
+    <div class="wy-list" id="wyList"></div>
+  </main>
+
+  <footer class="wy-footer">数据来源 db / db.json · 本地服务 http://localhost:3004</footer>
+
+  <script>
+    // ══════════════════════════════════════════════════════
+    //  ✍️ 作者：王烨 · 上图下文渲染（所有变量以 wy 开头）
+    // ══════════════════════════════════════════════════════
+
+    var wyApi = 'http://localhost:3004/api/poems';
+    var wyPicApi = 'http://localhost:3004/api/pic?url=';
+    // 序号用中文数字，超过十位后退回阿拉伯数字
+    var wyNums = ['壹', '贰', '叁', '肆', '伍', '陆', '柒', '捌', '玖', '拾'];
+
+    var wyLoading = document.getElementById('wyLoading');
+    var wyError = document.getElementById('wyError');
+    var wyList = document.getElementById('wyList');
+    var wyCount = document.getElementById('wyCount');
+
+    // 渲染单张卡片：图片在上，标题与正文在下
+    function wyCreateCard(wyPoem, wyIndex) {
+      var wyCard = document.createElement('article');
+      wyCard.className = 'wy-card';
+      wyCard.style.animationDelay = (wyIndex * 90) + 'ms';
+
+      // 上图容器
+      var wyCover = document.createElement('div');
+      wyCover.className = 'wy-cover';
+
+      var wyImg = document.createElement('img');
+      wyImg.className = 'wy-card-img';
+      wyImg.alt = wyPoem.title || '诗词配图';
+      wyImg.loading = 'lazy';
+      // 图片走本地服务代理，避免 gitee 防盗链导致空白
+      wyImg.src = wyPoem.pic ? wyPicApi + encodeURIComponent(wyPoem.pic) : '';
+      // 加载完成后再淡入，避免半张图闪现
+      wyImg.addEventListener('load', function () {
+        wyImg.classList.add('wy-loaded');
+      });
+      wyImg.addEventListener('error', function () {
+        wyImg.classList.add('wy-loaded');
+      });
+
+      // 左上角序号
+      var wyNo = document.createElement('span');
+      wyNo.className = 'wy-card-no';
+      wyNo.textContent = wyNums[wyIndex] || String(wyIndex + 1);
+
+      wyCover.appendChild(wyImg);
+      wyCover.appendChild(wyNo);
+
+      // 下文容器
+      var wyBody = document.createElement('div');
+      wyBody.className = 'wy-card-body';
+
+      var wyTitle = document.createElement('h2');
+      wyTitle.className = 'wy-card-title';
+      wyTitle.textContent = wyPoem.title || '无题';
+
+      var wyDivider = document.createElement('div');
+      wyDivider.className = 'wy-card-divider';
+
+      var wyContent = document.createElement('p');
+      wyContent.className = 'wy-card-content';
+      wyContent.textContent = wyPoem.content || '';
+
+      wyBody.appendChild(wyTitle);
+      wyBody.appendChild(wyDivider);
+      wyBody.appendChild(wyContent);
+
+      wyCard.appendChild(wyCover);
+      wyCard.appendChild(wyBody);
+      return wyCard;
+    }
+
+    // 请求接口并渲染
+    fetch(wyApi)
+      .then(function (wyRes) {
+        if (!wyRes.ok) {
+          throw new Error('HTTP ' + wyRes.status);
+        }
+        return wyRes.json();
+      })
+      .then(function (wyPoems) {
+        wyLoading.classList.add('wy-hide');
+        if (!Array.isArray(wyPoems) || wyPoems.length === 0) {
+          wyLoading.classList.remove('wy-hide');
+          wyLoading.innerHTML = 'db.json 里还没有诗词数据。';
+          return;
+        }
+        wyPoems.forEach(function (wyPoem, wyIndex) {
+          wyList.appendChild(wyCreateCard(wyPoem, wyIndex));
+        });
+        wyCount.textContent = '共 ' + wyPoems.length + ' 首';
+      })
+      .catch(function (wyErr) {
+        wyLoading.classList.add('wy-hide');
+        wyError.classList.remove('wy-hide');
+        console.error('数据读取失败：', wyErr);
+      });
+  </script>
+</body>
+</html>

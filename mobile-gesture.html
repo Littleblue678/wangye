@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<!--
+作者：王烨
+学号：24001010613
+建立时间：2026-11-16
+使用模型：DeepSeek-V4.1-Flash
+功能名称：中华美食手势卡片
+功能简介：任务二手势卡片。页面横向排列 4 道中华美食卡片（菜名、简介、渐变背景），底部显示"第 1/4 张"。
+          监听 touchstart / touchend，用 changedTouches[0] 计算横向位移，阈值 40px：左滑下一张、右滑上一张，
+          边界给出"已经是第一张/最后一张"提示；卡片容器设 touch-action: pan-y 保证纵向滚动正常；
+          切换带 0.3s 过渡，并用 300ms 冷却防止快速连滑一次跳两张。
+命名规则：所有 CSS 类名、id、JS 变量均以 wy_ 开头。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>中华美食 · 手势卡片</title>
+<style>
+  :root{
+    --wy_ink:#1b1b1f;
+    --wy_paper:#f7f3ea;
+    --wy_muted:#8a8175;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    background:var(--wy_paper);color:var(--wy_ink);
+    display:flex;flex-direction:column;min-height:100vh;
+    padding-top:18px;
+  }
+
+  /* 页头 */
+  .wy_head{padding:0 22px 10px}
+  .wy_title{font-size:23px;letter-spacing:2px;font-family:"Songti SC",serif}
+  .wy_sub{font-size:12.5px;color:var(--wy_muted);margin-top:6px;letter-spacing:.5px}
+
+  /* 卡片舞台：touch-action: pan-y，纵向手势交给浏览器滚动页面 */
+  .wy_stage{
+    position:relative;flex:1;margin:12px 22px 0;overflow:hidden;
+    border-radius:22px;touch-action:pan-y;
+    box-shadow:0 18px 40px -22px rgba(60,40,10,.45);
+  }
+  .wy_deck{
+    display:flex;width:400%;height:100%;
+    will-change:transform;
+    transition:transform .3s cubic-bezier(.22,.8,.24,1);   /* 切换 0.3s 过渡 */
+  }
+  .wy_card{
+    width:25%;height:100%;flex:0 0 25%;
+    padding:26px 24px;display:flex;flex-direction:column;justify-content:flex-end;
+    color:#fff;position:relative;overflow:hidden;
+  }
+  .wy_card::after{
+    content:"";position:absolute;inset:0;z-index:1;
+    background:linear-gradient(180deg,rgba(0,0,0,.06) 0%,rgba(0,0,0,.42) 68%,rgba(0,0,0,.62) 100%);
+  }
+  /* 菜品照片：加载完成后淡入，未加载时显示渐变底色 */
+  .wy_card_img{
+    position:absolute;inset:0;width:100%;height:100%;
+    object-fit:cover;z-index:0;opacity:0;transition:opacity .5s;
+  }
+  .wy_card_img.wy_ready{opacity:1}
+  .wy_card_no{
+    position:absolute;top:18px;left:22px;z-index:2;
+    font-size:13px;letter-spacing:3px;opacity:.85;
+    border:1px solid rgba(255,255,255,.5);border-radius:999px;padding:3px 10px;
+  }
+  .wy_card_body{position:relative;z-index:2}
+  .wy_card_name{font-family:"Songti SC",serif;font-size:32px;letter-spacing:4px;margin-bottom:10px}
+  .wy_card_desc{font-size:13.5px;line-height:1.85;opacity:.92;max-width:88%}
+  .wy_card_tag{
+    display:inline-block;margin-top:16px;font-size:12px;letter-spacing:2px;
+    padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.35);
+  }
+
+  /* 底部信息 */
+  .wy_foot{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 26px 22px;font-size:13px;color:var(--wy_muted);
+  }
+  .wy_index{font-weight:600;color:var(--wy_ink);letter-spacing:1px}
+  .wy_tip{font-size:12px}
+
+  /* 边界提示 */
+  .wy_toast{
+    position:fixed;left:50%;bottom:96px;transform:translate(-50%,10px);
+    background:rgba(27,27,31,.86);color:#fff;font-size:13px;
+    padding:9px 18px;border-radius:999px;opacity:0;pointer-events:none;
+    transition:opacity .22s,transform .22s;white-space:nowrap;z-index:9;
+  }
+  .wy_toast.wy_show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+  <header class="wy_head">
+    <h1 class="wy_title">中华美食</h1>
+    <p class="wy_sub">左右滑动切换 · 一张一停</p>
+  </header>
+
+  <div class="wy_stage" id="wy_stage">
+    <div class="wy_deck" id="wy_deck">
+      <article class="wy_card" style="background:linear-gradient(150deg,#c0392b,#7b1f16)">
+        <img class="wy_card_img" alt="麻婆豆腐"
+             src="images/dish-mapo.jpg">
+        <span class="wy_card_no">01</span>
+        <div class="wy_card_body">
+          <h2 class="wy_card_name">麻婆豆腐</h2>
+          <p class="wy_card_desc">郫县豆瓣与花椒同炒，麻辣鲜香，豆腐嫩而不散，一勺红油盖住整碗米饭。</p>
+          <span class="wy_card_tag">川菜</span>
+        </div>
+      </article>
+      <article class="wy_card" style="background:linear-gradient(150deg,#b8862f,#6b4a12)">
+        <img class="wy_card_img" alt="北京烤鸭"
+             src="images/dish-duck.jpg">
+        <span class="wy_card_no">02</span>
+        <div class="wy_card_body">
+          <h2 class="wy_card_name">北京烤鸭</h2>
+          <p class="wy_card_desc">枣木明火烤至皮色枣红，片成柳叶薄片，配荷叶饼、甜面酱与葱丝卷食。</p>
+          <span class="wy_card_tag">京菜</span>
+        </div>
+      </article>
+      <article class="wy_card" style="background:linear-gradient(150deg,#2f6f5e,#14392f)">
+        <img class="wy_card_img" alt="兰州牛肉面"
+             src="images/dish-noodle.jpg">
+        <span class="wy_card_no">03</span>
+        <div class="wy_card_body">
+          <h2 class="wy_card_name">兰州牛肉面</h2>
+          <p class="wy_card_desc">一清二白三红四绿五黄，牛骨清汤配现拉细面，撒一把香菜与辣油。</p>
+          <span class="wy_card_tag">西北</span>
+        </div>
+      </article>
+      <article class="wy_card" style="background:linear-gradient(150deg,#7d4b8a,#3a1f45)">
+        <img class="wy_card_img" alt="广式早茶"
+             src="images/dish-dims.jpg">
+        <span class="wy_card_no">04</span>
+        <div class="wy_card_body">
+          <h2 class="wy_card_name">广式早茶</h2>
+          <p class="wy_card_desc">一盅两件，虾饺晶莹、烧卖饱满，普洱冲开，慢慢坐到日上三竿。</p>
+          <span class="wy_card_tag">粤菜</span>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <footer class="wy_foot">
+    <span class="wy_index" id="wy_index_text">第 1/4 张</span>
+    <span class="wy_tip">左右滑动查看</span>
+  </footer>
+
+  <p class="wy_toast" id="wy_toast"></p>
+
+<script>
+  var wy_stage = document.getElementById('wy_stage');
+  var wy_deck = document.getElementById('wy_deck');
+  var wy_index_text = document.getElementById('wy_index_text');
+  var wy_toast = document.getElementById('wy_toast');
+  var wy_cards = document.querySelectorAll('.wy_card');
+
+  // 菜品照片加载完成后淡入；未加载完时先显示卡片渐变底色
+  var wy_card_imgs = document.querySelectorAll('.wy_card_img');
+  for (var wy_i = 0; wy_i < wy_card_imgs.length; wy_i++) {
+    (function (wy_img) {
+      if (wy_img.complete && wy_img.naturalWidth > 0) {
+        wy_img.classList.add('wy_ready');
+        return;
+      }
+      wy_img.addEventListener('load', function () {
+        wy_img.classList.add('wy_ready');
+      });
+    })(wy_card_imgs[wy_i]);
+  }
+
+  var wy_count = wy_cards.length;   // 卡片总数 4
+  var wy_index = 0;                 // 当前第几张，从 0 开始
+  var wy_start_x = 0;               // 手指按下时的横坐标
+  var wy_threshold = 40;            // 判定阈值 40px
+  var wy_cool_until = 0;            // 冷却截止时间戳（300ms）
+  var wy_toast_timer = null;
+
+  // 渲染卡片位置并更新底部文字
+  function wy_render() {
+    // deck 宽度是容器的 400%，所以 25% 正好等于一张卡片
+    wy_deck.style.transform = 'translateX(' + (-wy_index * 25) + '%)';
+    wy_index_text.textContent = '第 ' + (wy_index + 1) + '/' + wy_count + ' 张';
+  }
+
+  // 边界提示：显示后 1.2 秒淡出
+  function wy_show_toast(wy_text) {
+    wy_toast.textContent = wy_text;
+    wy_toast.classList.add('wy_show');
+    if (wy_toast_timer) clearTimeout(wy_toast_timer);
+    wy_toast_timer = setTimeout(function () {
+      wy_toast.classList.remove('wy_show');
+    }, 1200);
+  }
+
+  // 触摸开始：记录起点横坐标；冷却期内直接忽略
+  wy_stage.addEventListener('touchstart', function (wy_e) {
+    if (Date.now() < wy_cool_until) return;       // 300ms 冷却中，忽略这次触摸
+    if (wy_e.touches.length !== 1) return;        // 只处理单指
+    wy_start_x = wy_e.touches[0].clientX;
+  }, { passive: true });
+
+  // 触摸结束：用 changedTouches[0] 计算横向位移
+  wy_stage.addEventListener('touchend', function (wy_e) {
+    if (Date.now() < wy_cool_until) return;       // 冷却中不处理
+    var wy_end_x = wy_e.changedTouches[0].clientX;
+    var wy_dx = wy_end_x - wy_start_x;            // 正数右滑，负数左滑
+
+    // 左滑：切到下一张
+    if (wy_dx <= -wy_threshold) {
+      if (wy_index < wy_count - 1) {
+        wy_index++;
+        wy_render();
+        wy_cool_until = Date.now() + 300;         // 300ms 冷却，防止一次连跳两张
+      } else {
+        wy_show_toast('已经是最后一张了');
+      }
+      return;
+    }
+
+    // 右滑：切到上一张
+    if (wy_dx >= wy_threshold) {
+      if (wy_index > 0) {
+        wy_index--;
+        wy_render();
+        wy_cool_until = Date.now() + 300;
+      } else {
+        wy_show_toast('已经是第一张了');
+      }
+    }
+  }, { passive: true });
+
+  // 首次渲染
+  wy_render();
+</script>
+</body>
+</html>

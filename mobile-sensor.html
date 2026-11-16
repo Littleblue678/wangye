@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<!--
+作者：王烨
+学号：24001010613
+建立时间：2026-11-16
+使用模型：DeepSeek-V4.1-Flash
+功能名称：摇一摇 · 今日菜谱
+功能简介：任务四设备能力。监听 devicemotion，取 accelerationIncludingGravity 三个分量计算合成加速度，
+          超过阈值 18 判定为摇动，随机抽一道菜并播放弹出动画，随后进入 1.5 秒冷却防止重复触发；
+          检测不到事件或 1.5 秒内没有数据时提示"当前设备不支持，请用手机打开"，并提供"点我抽一次"按钮降级。
+          iOS 13+ 需用户手势触发 DeviceMotionEvent.requestPermission() 才能拿到数据。
+命名规则：所有 CSS 类名、id、JS 变量均以 wy_ 开头。
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>摇一摇 · 今日菜谱</title>
+<style>
+  :root{
+    --wy_bg:#0f1420;
+    --wy_panel:#18202f;
+    --wy_gold:#e3b667;
+    --wy_muted:#8d94a5;
+    --wy_text:#eef1f7;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{height:100%}
+  body{
+    font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+    background:radial-gradient(120% 80% at 50% 0%,#1d2740 0%,var(--wy_bg) 60%);
+    color:var(--wy_text);min-height:100vh;
+    display:flex;flex-direction:column;padding:20px;
+  }
+
+  .wy_head{text-align:center;padding:8px 0 4px}
+  .wy_title{font-family:"Songti SC",serif;font-size:22px;letter-spacing:4px;color:var(--wy_gold)}
+  .wy_sub{font-size:12.5px;color:var(--wy_muted);margin-top:8px;letter-spacing:1px;line-height:1.8}
+
+  /* 结果卡片 */
+  .wy_card{
+    flex:1;margin:20px 0 16px;border-radius:24px;position:relative;overflow:hidden;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    text-align:center;padding:28px 22px;
+    background:linear-gradient(160deg,#243352,#141c2b);
+    border:1px solid rgba(227,182,103,.22);
+    box-shadow:0 24px 50px -30px rgba(0,0,0,.9);
+  }
+  .wy_card::before{
+    content:"";position:absolute;inset:-40% -20% auto -20%;height:70%;
+    background:radial-gradient(closest-side,rgba(227,182,103,.18),transparent);
+    pointer-events:none;
+  }
+  .wy_card_tip{font-size:12px;letter-spacing:3px;color:var(--wy_muted);margin-bottom:14px}
+  .wy_card_name{
+    font-family:"Songti SC",serif;font-size:36px;letter-spacing:6px;
+    color:var(--wy_gold);min-height:46px;
+  }
+  .wy_card_desc{font-size:13px;line-height:1.9;color:#c7cddb;margin-top:14px;max-width:86%}
+
+  /* 抽中时的弹出动画 */
+  @keyframes wy_pop{
+    0%{transform:scale(.88);opacity:.25}
+    60%{transform:scale(1.04);opacity:1}
+    100%{transform:scale(1);opacity:1}
+  }
+  .wy_card.wy_pop{animation:wy_pop .32s cubic-bezier(.22,.8,.24,1)}
+
+  /* 数据面板 */
+  .wy_panel{
+    background:var(--wy_panel);border-radius:16px;padding:14px 16px;
+    border:1px solid rgba(255,255,255,.06);
+  }
+  .wy_row{display:flex;justify-content:space-between;font-size:12.5px;color:var(--wy_muted)}
+  .wy_val{color:var(--wy_text);font-variant-numeric:tabular-nums}
+  .wy_val.wy_hot{color:var(--wy_gold)}
+
+  /* 降级按钮 */
+  .wy_btn{
+    margin-top:14px;width:100%;padding:14px;border:none;border-radius:14px;
+    font-size:15px;letter-spacing:2px;font-family:inherit;
+    background:linear-gradient(135deg,#e3b667,#c9973f);color:#1b1408;
+    font-weight:600;cursor:pointer;transition:transform .15s;
+  }
+  .wy_btn:active{transform:scale(.985)}
+
+  .wy_status{
+    margin-top:12px;font-size:12px;line-height:1.8;color:var(--wy_muted);
+    text-align:center;min-height:18px;
+  }
+  .wy_status.wy_warn{color:#f0a35e}
+
+  /* 降级说明 */
+  .wy_note{
+    margin-top:14px;padding:14px 16px;border-radius:14px;
+    background:rgba(255,255,255,.03);border:1px dashed rgba(255,255,255,.12);
+    font-size:12px;line-height:1.95;color:#a9b0c0;
+  }
+  .wy_note b{color:var(--wy_gold);font-weight:600}
+</style>
+</head>
+<body>
+  <header class="wy_head">
+    <h1 class="wy_title">摇一摇 · 今日菜谱</h1>
+    <p class="wy_sub">摇一摇手机，抽今日菜谱</p>
+  </header>
+
+  <section class="wy_card wy_pop" id="wy_card">
+    <p class="wy_card_tip" id="wy_card_tip">今日推荐</p>
+    <h2 class="wy_card_name" id="wy_card_name">摇一摇</h2>
+    <p class="wy_card_desc" id="wy_card_desc">用力摇动手机，或点击下方按钮，看看今天吃什么。</p>
+  </section>
+
+  <section class="wy_panel">
+    <div class="wy_row">
+      <span>合成加速度</span>
+      <span class="wy_val" id="wy_acc_text">--</span>
+    </div>
+  </section>
+
+  <button class="wy_btn" id="wy_btn">点我抽一次</button>
+  <p class="wy_status" id="wy_status">正在检测设备传感器…</p>
+
+  <section class="wy_note">
+    <b>为什么必须做降级：</b>devicemotion 依赖真实硬件传感器，桌面浏览器、部分老机型、以及微信/QQ 内置浏览器里
+    经常拿不到数据；iOS 13+ 还要求由用户手势触发权限申请。没有降级按钮时，这些设备只能看到空白结果，
+    功能等于不可用。提供"点我抽一次"后，任何设备都能完成抽取，功能不会因硬件或权限差异中断。
+  </section>
+
+<script>
+  var wy_menu = [
+    { wy_name: '重庆火锅', wy_desc: '红汤翻滚，毛肚七上八下，配一碗香油蒜泥碟才算完整。' },
+    { wy_name: '小笼包', wy_desc: '皮薄如纸，咬开先吸汤汁，再蘸一点镇江香醋。' },
+    { wy_name: '烤红薯', wy_desc: '炉膛里烤到焦糖流油，捧在手里是冬天的温度。' },
+    { wy_name: '糖葫芦', wy_desc: '山楂裹一层脆糖壳，酸甜在齿间咔嗒一声裂开。' },
+    { wy_name: '担担面', wy_desc: '芝麻酱与红油打底，肉臊酥香，拌开就是一碗烟火。' },
+    { wy_name: '兰州牛肉面', wy_desc: '一清二白三红四绿五黄，清汤配现拉细面。' }
+  ];
+
+  var wy_card = document.getElementById('wy_card');
+  var wy_card_tip = document.getElementById('wy_card_tip');
+  var wy_card_name = document.getElementById('wy_card_name');
+  var wy_card_desc = document.getElementById('wy_card_desc');
+  var wy_acc_text = document.getElementById('wy_acc_text');
+  var wy_btn = document.getElementById('wy_btn');
+  var wy_status = document.getElementById('wy_status');
+
+  var wy_threshold = 18;          // 合成加速度阈值（静止时约 9.8）
+  var wy_cooldown_ms = 1500;      // 冷却 1.5 秒，防止一次摇动重复触发
+  var wy_cool_until = 0;          // 冷却截止时间戳
+  var wy_last_index = -1;         // 上次抽到的菜，避免连续重复
+  var wy_has_data = false;        // 是否收到过加速度数据
+  var wy_listening = false;       // 是否已经绑定 devicemotion
+
+  // 抽一道菜，并播放弹出动画
+  function wy_pick() {
+    var wy_new_index = wy_last_index;
+    // 最多尝试 10 次，保证与上一次不同
+    for (var wy_i = 0; wy_i < 10 && wy_new_index === wy_last_index; wy_i++) {
+      wy_new_index = Math.floor(Math.random() * wy_menu.length);
+    }
+    wy_last_index = wy_new_index;
+    var wy_item = wy_menu[wy_new_index];
+
+    wy_card_tip.textContent = '今天吃这个';
+    wy_card_name.textContent = wy_item.wy_name;
+    wy_card_desc.textContent = wy_item.wy_desc;
+
+    // 先移除再加回动画类，强制重排，保证连续点击也有动画
+    wy_card.classList.remove('wy_pop');
+    void wy_card.offsetWidth;
+    wy_card.classList.add('wy_pop');
+  }
+
+  // 摇动回调：合成加速度超过阈值且不在冷却中才触发
+  function wy_on_motion(wy_e) {
+    var wy_acc = wy_e.accelerationIncludingGravity;
+    if (!wy_acc) return;
+
+    var wy_x = wy_acc.x || 0;
+    var wy_y = wy_acc.y || 0;
+    var wy_z = wy_acc.z || 0;
+    // 合成加速度 = 三个方向分量的平方和开根号
+    var wy_total = Math.sqrt(wy_x * wy_x + wy_y * wy_y + wy_z * wy_z);
+
+    // 桌面浏览器会派发事件但三个分量全是 0，这种情况视为"没有数据"
+    if (wy_total > 0.5 && !wy_has_data) {
+      wy_has_data = true;
+      wy_status.textContent = '传感器已就绪，摇一摇手机试试';
+      wy_status.classList.remove('wy_warn');
+    }
+
+    wy_acc_text.textContent = wy_total.toFixed(1);
+    if (wy_total > wy_threshold) wy_acc_text.classList.add('wy_hot');
+    else wy_acc_text.classList.remove('wy_hot');
+
+    if (wy_total > wy_threshold && Date.now() > wy_cool_until) {
+      wy_cool_until = Date.now() + wy_cooldown_ms;
+      wy_pick();
+      wy_status.textContent = '抽中啦，冷却 1.5 秒后可再摇';
+    }
+  }
+
+  // 开始监听传感器
+  function wy_start_listen() {
+    if (wy_listening) return;
+    wy_listening = true;
+    window.addEventListener('devicemotion', wy_on_motion, { passive: true });
+
+    // 1.5 秒内没有收到数据，判定为不支持
+    setTimeout(function () {
+      if (!wy_has_data) {
+        wy_status.textContent = '当前设备不支持，请用手机打开';
+        wy_status.classList.add('wy_warn');
+      }
+    }, 1500);
+  }
+
+  // 点击按钮：既是降级方案，也承担 iOS 的授权入口
+  wy_btn.addEventListener('click', function () {
+    wy_pick();
+
+    // iOS 13+ 必须在用户手势中申请权限，否则拿不到加速度数据
+    if (typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(function (wy_res) {
+        if (wy_res === 'granted') {
+          wy_start_listen();
+        } else {
+          wy_status.textContent = '未授权传感器，仍可用按钮抽取';
+          wy_status.classList.add('wy_warn');
+        }
+      }).catch(function () {
+        wy_status.textContent = '授权失败（iOS 需 HTTPS 访问），仍可用按钮抽取';
+        wy_status.classList.add('wy_warn');
+      });
+      return;
+    }
+
+    // 非 iOS：直接尝试监听，若设备不支持会自动显示提示
+    wy_start_listen();
+  });
+
+  // 环境判断：完全没有该 API 时直接给提示，按钮依然可用
+  if (typeof DeviceMotionEvent === 'undefined') {
+    wy_status.textContent = '当前设备不支持，请用手机打开';
+    wy_status.classList.add('wy_warn');
+  } else if (typeof DeviceMotionEvent.requestPermission !== 'function') {
+    // Android 等无需授权，自动开始监听
+    wy_start_listen();
+  } else {
+    // iOS：等用户点击按钮时再申请权限
+    wy_status.textContent = 'iOS 需点击"点我抽一次"授权传感器';
+  }
+</script>
+</body>
+</html>
